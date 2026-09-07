@@ -1,0 +1,3345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Kenyatta Betting Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --bg-primary: #f0f4fc;
+            --bg-secondary: #ffffff;
+            --bg-sidebar: #0a0e1a;
+            --bg-sidebar-hover: #151e30;
+            --bg-card: #ffffff;
+            --bg-card-glass: rgba(255, 255, 255, 0.78);
+            --bg-input: #f0f4fc;
+            --text-primary: #0a0e1a;
+            --text-secondary: #4a5a72;
+            --text-light: #7a8aa0;
+            --text-white: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow: 0 2px 20px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.10);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.14);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-fast: 0.15s ease;
+            --accent: #d63031;
+            --accent-hover: #b71c1c;
+            --accent-light: #fde8e8;
+            --accent-glow: rgba(214, 48, 49, 0.25);
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+            --info: #0984e3;
+            --status-bg: #f0f4fc;
+            --fixture-card: #ffffff;
+            --table-row-hover: #f5f7fc;
+            --kenyan-green: #00691e;
+            --kenyan-red: #d63031;
+            --kenyan-black: #0a0e1a;
+            --kenyan-gold: #fdcb6e;
+            --gradient-primary: linear-gradient(135deg, #d63031 0%, #b71c1c 100%);
+            --gradient-success: linear-gradient(135deg, #00b894 0%, #00695c 100%);
+            --gradient-gold: linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%);
+            --gradient-bet: linear-gradient(135deg, #00691e 0%, #004d14 100%);
+            --gradient-ai: linear-gradient(135deg, #6c5ce7 0%, #0984e3 100%);
+            --glow-green: #00e676;
+            --glow-green-soft: rgba(0, 230, 118, 0.25);
+            --glow-green-bright: rgba(0, 230, 118, 0.6);
+            --header-bg: #0a0e1a;
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #121829;
+            --bg-sidebar: #060a14;
+            --bg-sidebar-hover: #1a2238;
+            --bg-card: #141c2e;
+            --bg-card-glass: rgba(20, 28, 46, 0.85);
+            --bg-input: #1a2238;
+            --text-primary: #e8ecf2;
+            --text-secondary: #8a9bb0;
+            --text-light: #5a6a7e;
+            --border-color: #1a2238;
+            --shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.6);
+            --accent: #e74c4c;
+            --accent-hover: #c0392b;
+            --accent-light: #2d1818;
+            --accent-glow: rgba(214, 48, 49, 0.2);
+            --status-bg: #1a2238;
+            --fixture-card: #141c2e;
+            --table-row-hover: #1a2238;
+            --kenyan-green: #2ecc71;
+            --kenyan-red: #e74c4c;
+            --kenyan-black: #0a0e1a;
+            --kenyan-gold: #f1c40f;
+            --gradient-primary: linear-gradient(135deg, #e74c4c 0%, #c0392b 100%);
+            --gradient-bet: linear-gradient(135deg, #2ecc71 0%, #1a8a3d 100%);
+            --gradient-ai: linear-gradient(135deg, #a29bfe 0%, #0984e3 100%);
+            --glow-green: #69f0ae;
+            --glow-green-soft: rgba(105, 240, 174, 0.2);
+            --glow-green-bright: rgba(105, 240, 174, 0.5);
+            --header-bg: #060a14;
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== Reset & Base ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 16px; scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background var(--transition), color var(--transition);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-hover); }
+
+        /* ===== Sidebar ===== */
+        .sidebar {
+            width: 76px;
+            min-height: 100vh;
+            background: var(--bg-sidebar);
+            padding: 24px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 1000;
+            transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+            box-shadow: 4px 0 40px rgba(0, 0, 0, 0.3);
+            border-right: 2px solid var(--kenyan-red);
+        }
+        .sidebar:hover { width: 240px; }
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0 18px;
+            width: 100%;
+            margin-bottom: 32px;
+            white-space: nowrap;
+        }
+        .sidebar .logo .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(214, 48, 49, 0.4);
+        }
+        .sidebar .logo .brand-text {
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            line-height: 1.2;
+        }
+        .sidebar .logo .brand-text .main { font-size: 18px; font-weight: 900; color: #fff; letter-spacing: -0.3px; }
+        .sidebar .logo .brand-text .sub { font-size: 9px; font-weight: 600; color: var(--kenyan-gold); letter-spacing: 1.5px; text-transform: uppercase; }
+        .sidebar:hover .logo .brand-text { opacity: 1; }
+
+        .sidebar .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            width: 100%;
+            padding: 0 10px;
+            flex: 1;
+        }
+        .sidebar .nav a {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+        }
+        .sidebar .nav a i { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+        .sidebar .nav a span { opacity: 0; transition: opacity 0.4s ease; }
+        .sidebar:hover .nav a span { opacity: 1; }
+        .sidebar .nav a:hover { background: var(--bg-sidebar-hover); color: #fff; }
+        .sidebar .nav a.active { background: var(--gradient-primary); color: #fff; box-shadow: 0 4px 20px rgba(214, 48, 49, 0.3); }
+        .sidebar .nav a .badge {
+            position: absolute;
+            right: 14px;
+            background: var(--kenyan-gold);
+            color: #0a0e1a;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .sidebar:hover .nav a .badge { opacity: 1; }
+
+        .sidebar .bottom {
+            padding: 16px 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .sidebar .bottom .theme-toggle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 50%;
+            transition: all 0.25s ease;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sidebar .bottom .theme-toggle:hover { background: var(--bg-sidebar-hover); color: #fff; }
+        .sidebar .bottom .theme-toggle span { display: none; }
+        .sidebar:hover .bottom .theme-toggle span {
+            display: inline;
+            margin-left: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ===== Main Content ===== */
+        .main {
+            flex: 1;
+            margin-left: 76px;
+            padding: 16px 20px 80px;
+            min-height: 100vh;
+            transition: margin-left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* ===== Top Bar ===== */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .topbar .greeting h1 {
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: -0.8px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .topbar .greeting h1 .flag-icon { -webkit-text-fill-color: initial; color: var(--kenyan-gold); }
+        .topbar .greeting p { color: var(--text-secondary); font-size: 13px; margin-top: 2px; -webkit-text-fill-color: var(--text-secondary); }
+        .topbar .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .topbar .actions .date-display {
+            background: var(--bg-card);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+            transition: all var(--transition);
+        }
+        .topbar .actions .date-display:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .topbar .actions .date-display i { color: var(--kenyan-red); }
+        .topbar .actions .calendar-btn {
+            background: var(--gradient-primary);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(214, 48, 49, 0.3);
+        }
+        .topbar .actions .calendar-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 32px rgba(214, 48, 49, 0.4); }
+
+        /* ===== News Ticker ===== */
+        .news-ticker {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 44px;
+        }
+        .news-ticker .label {
+            font-weight: 700;
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--kenyan-red);
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .news-ticker .label i { animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .news-ticker .ticker-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            height: 24px;
+        }
+        .news-ticker .ticker-content .ticker-item {
+            position: absolute;
+            white-space: nowrap;
+            font-size: 13px;
+            color: var(--text-secondary);
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            top: 0;
+            left: 0;
+        }
+        .news-ticker .ticker-content .ticker-item.active {
+            opacity: 1;
+            position: relative;
+            animation: tickerSlide 8s ease-in-out infinite;
+        }
+        .news-ticker .ticker-content .ticker-item .highlight { color: var(--accent); font-weight: 700; }
+        .news-ticker .ticker-content .ticker-item .success-text { color: var(--success); font-weight: 600; }
+        @keyframes tickerSlide {
+            0% { opacity: 0; transform: translateY(10px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        /* ===== Page System ===== */
+        .page { display: none; animation: fadeSlideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .page.active { display: block; }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .page-title i { color: var(--kenyan-red); }
+        .page-title .accent-line { flex: 1; height: 2px; background: var(--gradient-primary); opacity: 0.15; border-radius: 2px; }
+
+        /* ===== Cards ===== */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            transition: all var(--transition);
+        }
+        .card:hover { box-shadow: var(--shadow-lg); }
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+        .card-title i { color: var(--kenyan-red); }
+
+        /* ===== Stats Grid ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .stat-card .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-secondary); font-weight: 600; }
+        .stat-card .value { font-size: 28px; font-weight: 900; margin-top: 2px; color: var(--text-primary); }
+        .stat-card .stat-icon-bg { position: absolute; right: 10px; bottom: 10px; font-size: 40px; opacity: 0.04; }
+
+        /* ===== Bet of the Day ===== */
+        .bet-day {
+            background: var(--gradient-bet);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            color: #fff;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 105, 30, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        .bet-day::after {
+            content: '🏆';
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 60px;
+            opacity: 0.08;
+        }
+        .bet-day .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .bet-day .match { font-size: 19px; font-weight: 800; margin: 4px 0 2px; letter-spacing: -0.3px; }
+        .bet-day .match .league-tag { font-size: 11px; font-weight: 500; opacity: 0.7; margin-left: 8px; }
+        .bet-day .prediction { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .bet-day .prediction .pill {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all var(--transition-fast);
+        }
+        .bet-day .prediction .pill:hover { background: rgba(255, 255, 255, 0.22); transform: scale(1.02); }
+        .bet-day .prediction .pill.highlight {
+            background: rgba(0, 230, 118, 0.25);
+            border: 1px solid var(--glow-green);
+            box-shadow: 0 0 20px var(--glow-green-bright), 0 0 60px var(--glow-green-soft);
+            animation: greenPulse 1.8s ease-in-out infinite;
+            font-weight: 800;
+        }
+        @keyframes greenPulse {
+            0%, 100% { box-shadow: 0 0 16px var(--glow-green-bright), 0 0 40px var(--glow-green-soft); transform: scale(1); }
+            50% { box-shadow: 0 0 32px var(--glow-green-bright), 0 0 80px var(--glow-green-soft); transform: scale(1.04); }
+        }
+
+        /* ===== Prediction Items ===== */
+        .prediction-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .prediction-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: var(--shadow);
+        }
+        .prediction-item:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: var(--shadow-lg); }
+        .prediction-item .match-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .prediction-item .teams { font-weight: 700; font-size: 15px; }
+        .prediction-item .teams .vs { color: var(--text-secondary); font-weight: 400; font-size: 12px; margin: 0 4px; }
+        .prediction-item .match-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .prediction-item .match-meta .league-tag {
+            background: var(--status-bg);
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .prediction-item .match-meta .datetime {
+            font-weight: 500;
+        }
+        .prediction-item .picks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .prediction-item .picks .pick {
+            background: var(--status-bg);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: all var(--transition-fast);
+            border: 1px solid var(--border-color);
+        }
+        .prediction-item .picks .pick:hover { transform: scale(1.03); }
+        .prediction-item .picks .pick.confident {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+        .prediction-item .picks .pick.best {
+            background: #00e676;
+            color: #0a0e1a;
+            border: 1px solid var(--glow-green);
+            box-shadow: 0 0 20px var(--glow-green-bright), 0 0 60px var(--glow-green-soft);
+            animation: greenPulse 1.8s ease-in-out infinite;
+            font-weight: 800;
+        }
+        .prediction-item .picks .pick.over-pick { background: #e3f0fd; color: var(--info); border-color: var(--info); }
+        .prediction-item .picks .pick.under-pick { background: #fef3e2; color: var(--warning); border-color: var(--warning); }
+        .prediction-item .safe-pick {
+            margin-top: 8px;
+            padding: 6px 12px;
+            background: var(--gradient-gold);
+            border-radius: var(--radius-xs);
+            font-size: 12px;
+            font-weight: 700;
+            color: #0a0e1a;
+            display: inline-block;
+        }
+        .prediction-item .odds-display {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--success);
+            background: rgba(0, 184, 148, 0.1);
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+        .prediction-item .confidence-display {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            background: var(--status-bg);
+            padding: 2px 10px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .confidence-bar { width: 50px; height: 4px; background: var(--status-bg); border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; }
+        .confidence-bar .fill { height: 100%; background: var(--gradient-primary); border-radius: 4px; transition: width 0.8s ease; }
+
+        /* ===== No Matches Message ===== */
+        .no-matches {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-secondary);
+        }
+        .no-matches .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+        .no-matches h4 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .no-matches p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ===== Bet Slip ===== */
+        .bet-slip-toggle {
+            position: fixed;
+            bottom: 28px;
+            right: 20px;
+            z-index: 800;
+            background: var(--gradient-primary);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 32px rgba(214, 48, 49, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .bet-slip-toggle:hover { transform: scale(1.05); box-shadow: 0 12px 40px rgba(214, 48, 49, 0.5); }
+        .bet-slip-toggle .count {
+            background: #fff;
+            color: var(--accent);
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .bet-slip-modal {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 850;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            width: 340px;
+            max-width: 90vw;
+            max-height: 60vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+        .bet-slip-modal.open { display: block; }
+        .bet-slip-modal .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .bet-slip-modal .header h3 { font-size: 17px; font-weight: 800; }
+        .bet-slip-modal .header .close { cursor: pointer; font-size: 22px; color: var(--text-secondary); }
+        .bet-slip-modal .slip-item {
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .bet-slip-modal .slip-item .pick-label { font-weight: 700; color: var(--accent); }
+        .bet-slip-modal .slip-total {
+            border-top: 2px solid var(--border-color);
+            padding-top: 14px;
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        /* ===== Fixtures ===== */
+        .fixture-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .fixture-controls select,
+        .fixture-controls input {
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 500;
+            min-width: 120px;
+            transition: all var(--transition-fast);
+        }
+        .fixture-controls select:focus,
+        .fixture-controls input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .fixture-controls .btn-clear {
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+            transition: all var(--transition-fast);
+        }
+        .fixture-controls .btn-clear:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+        .fixture-list { display: flex; flex-direction: column; gap: 8px; }
+        .fixture-row {
+            background: var(--fixture-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: var(--shadow);
+            gap: 6px;
+        }
+        .fixture-row:hover { border-color: var(--accent); transform: translateX(4px); box-shadow: var(--shadow-lg); }
+        .fixture-row .info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .fixture-row .info .league { font-size: 10px; font-weight: 600; color: var(--text-light); background: var(--status-bg); padding: 2px 12px; border-radius: 12px; }
+        .fixture-row .info .teams { font-weight: 700; font-size: 14px; }
+        .fixture-row .info .teams .vs { color: var(--text-secondary); font-weight: 400; font-size: 11px; margin: 0 4px; }
+        .fixture-row .info .score { font-weight: 800; font-size: 15px; min-width: 40px; text-align: center; color: var(--kenyan-red); }
+        .fixture-row .info .status { font-size: 10px; font-weight: 600; padding: 2px 12px; border-radius: 12px; background: var(--status-bg); color: var(--text-secondary); }
+        .fixture-row .info .status.live { background: #fde8e8; color: var(--danger); animation: pulse-live 1.5s infinite; }
+        @keyframes pulse-live { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .fixture-row .info .status.finished { background: #e8f5e9; color: var(--success); }
+        .fixture-row .info .date-time { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+        .fixture-row .actions-sm { display: flex; gap: 6px; }
+        .fixture-row .actions-sm button {
+            padding: 4px 12px;
+            border-radius: var(--radius-xs);
+            font-size: 11px;
+            font-weight: 600;
+            transition: all var(--transition-fast);
+            border: none;
+            cursor: pointer;
+        }
+        .fixture-row .actions-sm .del-btn { background: #fde8e8; color: var(--danger); }
+        .fixture-row .actions-sm .del-btn:hover { background: var(--danger); color: #fff; transform: scale(1.05); }
+
+        /* ===== Tables ===== */
+        .table-wrap { overflow-x: auto; }
+        .table-wrap table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .table-wrap table th {
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-color);
+            background: var(--bg-card);
+            position: sticky;
+            top: 0;
+        }
+        .table-wrap table td { padding: 10px 12px; border-bottom: 1px solid var(--border-color); transition: background 0.2s ease; }
+        .table-wrap table tr:hover td { background: var(--table-row-hover); }
+        .table-wrap table .pos { font-weight: 800; width: 30px; text-align: center; font-size: 13px; }
+        .table-wrap table .pos.gold { color: var(--kenyan-gold); }
+        .table-wrap table .pos.silver { color: #bdc3c7; }
+        .table-wrap table .pos.bronze { color: #e67e22; }
+        .table-wrap table .team-name { font-weight: 700; }
+        .table-wrap table .form { display: flex; gap: 3px; flex-wrap: wrap; }
+        .table-wrap table .form .f {
+            width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; transition: transform var(--transition-fast);
+        }
+        .table-wrap table .form .f:hover { transform: scale(1.15); }
+        .table-wrap table .form .f.W { background: var(--success); }
+        .table-wrap table .form .f.D { background: var(--warning); }
+        .table-wrap table .form .f.L { background: var(--danger); }
+
+        /* ===== Admin ===== */
+        .admin-login {
+            max-width: 400px;
+            margin: 40px auto;
+            text-align: center;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 36px 32px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-xl);
+        }
+        .admin-login .lock { font-size: 40px; color: var(--kenyan-red); margin-bottom: 14px; background: var(--accent-light); width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+        .admin-login h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+        .admin-login p { color: var(--text-secondary); font-size: 13px; margin-bottom: 20px; }
+        .admin-login .input-group { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .admin-login .input-group input {
+            padding: 10px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 13px;
+            font-weight: 500;
+            width: 180px;
+        }
+        .admin-login .input-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .admin-login .input-group button {
+            padding: 10px 28px;
+            border-radius: var(--radius-sm);
+            background: var(--gradient-primary);
+            color: #fff;
+            font-weight: 700;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(214, 48, 49, 0.3);
+        }
+        .admin-login .input-group button:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(214, 48, 49, 0.4); }
+        .admin-login .error { color: var(--danger); font-size: 13px; margin-top: 12px; font-weight: 500; }
+
+        .admin-panel { display: none; }
+        .admin-panel.active { display: block; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+        .admin-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+        }
+        .admin-section:hover { border-color: rgba(214, 48, 49, 0.2); box-shadow: var(--shadow-lg); }
+        .admin-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+        .admin-section h3 i { color: var(--kenyan-red); }
+        .admin-section .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+        .admin-section .form-group label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+        .admin-section .form-group input,
+        .admin-section .form-group select {
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .admin-section .form-group input:focus,
+        .admin-section .form-group select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        .admin-section .btn-primary {
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            background: var(--gradient-primary);
+            color: #fff;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            font-size: 12px;
+            box-shadow: 0 2px 16px rgba(214, 48, 49, 0.25);
+            border: none;
+        }
+        .admin-section .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(214, 48, 49, 0.35); }
+        .admin-section .btn-outline {
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+            font-size: 12px;
+        }
+        .admin-section .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+        .admin-section .item-list { max-height: 160px; overflow-y: auto; margin-top: 8px; }
+        .admin-section .item-list .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background var(--transition-fast);
+        }
+        .admin-section .item-list .item:hover { background: var(--table-row-hover); }
+        .admin-section .item-list .item .del { color: var(--danger); cursor: pointer; font-size: 13px; padding: 0 6px; transition: all var(--transition-fast); }
+        .admin-section .item-list .item .del:hover { opacity: 0.7; transform: scale(1.2); }
+
+
+        /* ===== Facebook Integration ===== */
+        .facebook-tools { margin-top: 18px; }
+        .facebook-status { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-secondary); margin:0 0 12px; }
+        .facebook-status .dot { width:8px; height:8px; border-radius:50%; background:#9aa4b2; }
+        .facebook-status.connected .dot { background:#1877f2; box-shadow:0 0 10px rgba(24,119,242,.45); }
+        .facebook-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+        .facebook-actions button, .facebook-actions a { text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:7px; cursor:pointer; }
+        .btn-facebook { background:#1877f2 !important; color:#fff !important; border:none !important; }
+        .btn-facebook:hover { filter:brightness(.94); transform:translateY(-2px); }
+        .btn-facebook-outline { border:1px solid #1877f2 !important; color:#1877f2 !important; background:transparent !important; }
+        .facebook-note { font-size:10px; line-height:1.5; color:var(--text-light); margin-top:10px; }
+
+        /* ===== Tracking ===== */
+        .tracking-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .tracking-stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all var(--transition-fast);
+        }
+        .tracking-stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .tracking-stat-card .num { font-size: 24px; font-weight: 900; color: var(--text-primary); }
+        .tracking-stat-card .num.correct { color: var(--success); }
+        .tracking-stat-card .num.incorrect { color: var(--danger); }
+        .tracking-stat-card .lbl { font-size: 10px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; margin-top: 2px; }
+
+        .tracking-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+        .tracking-filter select {
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .tracking-filter .btn-clear {
+            padding: 8px 18px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+            transition: all var(--transition-fast);
+        }
+        .tracking-filter .btn-clear:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+        .table-wrap table .status-badge {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .table-wrap table .status-badge.correct { background: #e8f5e9; color: var(--success); }
+        .table-wrap table .status-badge.incorrect { background: #fde8e8; color: var(--danger); }
+        .table-wrap table .status-badge.pending { background: #fff3e0; color: var(--warning); }
+
+        /* ===== Modal/Overlay ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+        .modal-overlay.open { display: flex; }
+        .modal {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            max-width: 520px;
+            width: 92%;
+            padding: 24px 28px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.35s ease;
+        }
+        @keyframes modalSlideIn { from { transform: scale(0.92) translateY(30px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        .modal .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal .modal-header h2 { font-size: 19px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .modal .modal-header h2 i { color: var(--kenyan-red); }
+        .modal .modal-header .close { font-size: 28px; color: var(--text-secondary); cursor: pointer; transition: all var(--transition-fast); }
+        .modal .modal-header .close:hover { color: var(--text-primary); transform: rotate(90deg); }
+
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin: 12px 0 16px; }
+        .calendar-grid .day-name { text-align: center; font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; padding: 6px 0; }
+        .calendar-grid .day {
+            text-align: center; padding: 8px 2px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; border: 1px solid transparent;
+        }
+        .calendar-grid .day:hover { background: var(--calendar-hover); transform: scale(1.04); }
+        .calendar-grid .day.selected { background: var(--gradient-primary); color: #fff; box-shadow: 0 4px 20px rgba(214,48,49,0.3); }
+        .calendar-grid .day.has-fixture { border-color: var(--kenyan-red); font-weight: 700; }
+        .calendar-grid .day.other-month { color: var(--text-light); opacity: 0.4; }
+        .calendar-grid .day.today { background: var(--accent-light); font-weight: 700; }
+
+        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .calendar-nav .month-label { font-weight: 800; font-size: 17px; }
+        .calendar-nav button {
+            padding: 4px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--status-bg);
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all var(--transition-fast);
+        }
+        .calendar-nav button:hover { background: var(--gradient-primary); color: #fff; }
+
+        .calendar-fixtures { margin-top: 14px; border-top: 1px solid var(--border-color); padding-top: 14px; }
+        .calendar-fixtures .cf-item {
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--status-bg);
+            margin-bottom: 4px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-fast);
+        }
+        .calendar-fixtures .cf-item:hover { background: var(--calendar-hover); transform: translateX(4px); }
+        .calendar-fixtures .cf-empty { color: var(--text-secondary); font-size: 13px; text-align: center; padding: 20px 0; }
+
+        /* ===== Toast ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        .toast {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 12px 20px;
+            box-shadow: var(--shadow-xl);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: toastSlideIn 0.4s ease;
+            border-left: 4px solid var(--info);
+            backdrop-filter: blur(8px);
+            width: 100%;
+        }
+        .toast.success { border-left-color: var(--success); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.info { border-left-color: var(--info); }
+        @keyframes toastSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .toast.hide { animation: toastSlideOut 0.3s ease forwards; }
+        @keyframes toastSlideOut { to { opacity: 0; transform: translateY(-20px); } }
+
+        /* ===== AI Assistant ===== */
+        .ai-assistant {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 900;
+            width: 340px;
+            max-width: 90vw;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            display: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            max-height: 70vh;
+        }
+        .ai-assistant.open { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .ai-assistant .header {
+            background: var(--gradient-ai);
+            padding: 14px 18px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ai-assistant .header h4 { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .ai-assistant .header .close { cursor: pointer; font-size: 20px; opacity: 0.8; transition: opacity 0.3s; }
+        .ai-assistant .header .close:hover { opacity: 1; }
+        .ai-assistant .body {
+            padding: 16px 18px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+        .ai-assistant .body .ai-message { margin-bottom: 12px; padding: 10px 14px; border-radius: var(--radius-sm); background: var(--bg-input); border-left: 3px solid var(--gradient-ai); }
+        .ai-assistant .body .ai-message .icon { color: #6c5ce7; margin-right: 6px; }
+        .ai-assistant .body .ai-message .highlight { color: var(--accent); font-weight: 700; }
+        .ai-assistant .body .ai-message .green { color: var(--success); font-weight: 700; }
+        .ai-assistant .footer {
+            padding: 12px 18px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 8px;
+        }
+        .ai-assistant .footer input {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+        .ai-assistant .footer button {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            background: var(--gradient-ai);
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .ai-assistant .footer button:hover { transform: scale(1.05); }
+
+        .ai-toggle {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 850;
+            background: var(--gradient-ai);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 32px rgba(108, 92, 231, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        .ai-toggle:hover { transform: scale(1.05); box-shadow: 0 12px 40px rgba(108, 92, 231, 0.5); }
+        .ai-toggle .ai-badge {
+            background: #fff;
+            color: #6c5ce7;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* ===== Mobile Responsive ===== */
+        @media (max-width: 768px) {
+            .sidebar { width: 56px; padding: 16px 0; }
+            .sidebar:hover { width: 56px; }
+            .sidebar .logo .brand-text,
+            .sidebar .nav a span,
+            .sidebar .bottom .theme-toggle span,
+            .sidebar .nav a .badge { display: none !important; }
+            .sidebar .nav a { justify-content: center; padding: 10px; }
+            .sidebar .nav a i { font-size: 16px; width: auto; }
+            .sidebar .logo .logo-icon { width: 36px; height: 36px; font-size: 16px; }
+            .sidebar .bottom .theme-toggle { width: 36px; height: 36px; padding: 0; }
+            .main { margin-left: 56px; padding: 12px 14px 100px; }
+            .topbar .greeting h1 { font-size: 20px; }
+            .topbar .greeting p { font-size: 12px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card .value { font-size: 22px; }
+            .stat-card { padding: 12px 14px; }
+            .bet-day { padding: 16px 18px; }
+            .bet-day .match { font-size: 16px; }
+            .bet-day .prediction .pill { font-size: 11px; padding: 3px 12px; }
+            .prediction-item { padding: 12px 14px; }
+            .prediction-item .teams { font-size: 13px; }
+            .fixture-row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 14px; }
+            .fixture-row .info { gap: 8px; }
+            .fixture-controls select,
+            .fixture-controls input { min-width: 80px; padding: 6px 10px; font-size: 11px; }
+            .admin-grid { grid-template-columns: 1fr; }
+            .admin-login { padding: 28px 20px; margin: 20px auto; }
+            .admin-login .input-group input { width: 100%; }
+            .tracking-stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .bet-slip-modal { width: 90vw; right: 5vw; bottom: 80px; }
+            .bet-slip-toggle { right: 10px; padding: 10px 16px; font-size: 12px; bottom: 20px; }
+            .ai-toggle { right: 10px; padding: 10px 14px; font-size: 12px; bottom: 80px; }
+            .card { padding: 16px; }
+            .page-title { font-size: 18px; }
+            .topbar .actions .date-display { font-size: 11px; padding: 6px 12px; }
+            .topbar .actions .calendar-btn { font-size: 11px; padding: 6px 14px; }
+            .modal { padding: 18px 16px; width: 96%; }
+            .toast-container { bottom: 80px; width: 95%; }
+            .news-ticker { padding: 8px 12px; min-height: 38px; }
+            .news-ticker .ticker-content { height: 20px; }
+            .news-ticker .ticker-content .ticker-item { font-size: 12px; }
+            .prediction-item .picks .pick { font-size: 11px; padding: 3px 10px; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .stat-card .value { font-size: 20px; }
+            .topbar .greeting h1 { font-size: 17px; }
+            .bet-day .match { font-size: 14px; }
+            .bet-day .prediction .pill { font-size: 10px; padding: 2px 10px; }
+            .fixture-row .info .teams { font-size: 12px; }
+            .fixture-row .info .score { font-size: 13px; }
+            .bet-slip-toggle { padding: 8px 14px; font-size: 11px; }
+            .ai-toggle { padding: 8px 12px; font-size: 11px; }
+            .prediction-item .safe-pick { font-size: 11px; padding: 4px 10px; }
+        }
+
+        .btn-primary {
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            background: var(--gradient-primary);
+            color: #fff;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            font-size: 12px;
+            box-shadow: 0 2px 16px rgba(214, 48, 49, 0.25);
+            border: none;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(214, 48, 49, 0.35); }
+
+        .debug-msg {
+            background: var(--bg-card);
+            border: 2px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-shield-halved"></i></div>
+            <div class="brand-text">
+                <span class="main">Kenyatta</span>
+                <span class="sub">Betting Analysis</span>
+            </div>
+        </div>
+        <nav class="nav">
+            <a href="#" class="active" data-page="dashboard"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a>
+            <a href="#" data-page="predictions"><i class="fas fa-bullseye"></i><span>Predictions</span><span class="badge">Hot</span></a>
+            <a href="#" data-page="insights"><i class="fas fa-lightbulb"></i><span>Insights</span></a>
+            <a href="#" data-page="tracking"><i class="fas fa-clipboard-list"></i><span>Tracker</span></a>
+            <a href="#" data-page="fixtures"><i class="fas fa-calendar-alt"></i><span>Fixtures</span></a>
+            <a href="#" data-page="tables"><i class="fas fa-table"></i><span>Tables</span></a>
+            <a href="#" data-page="admin"><i class="fas fa-user-shield"></i><span>Admin</span></a>
+        </nav>
+        <div class="bottom">
+            <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i><span>Theme</span></button>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN ===== -->
+    <div class="main" id="mainContent">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="greeting">
+                <h1><span class="flag-icon">🇰🇪</span> Kenyatta Betting Analysis</h1>
+                <p id="pageSub">Professional betting insights & predictions</p>
+            </div>
+            <div class="actions">
+                <div class="date-display">
+                    <i class="fas fa-calendar-day"></i>
+                    <span id="currentDateDisplay"></span>
+                </div>
+                <button class="calendar-btn" id="openCalendarBtn">
+                    <i class="fas fa-calendar-alt"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic News Ticker -->
+        <div class="news-ticker" id="newsTicker">
+            <div class="label"><i class="fas fa-circle"></i> LIVE</div>
+            <div class="ticker-content" id="tickerContent">
+                <div class="ticker-item active">Loading updates...</div>
+            </div>
+        </div>
+
+        <!-- ===== PAGE: DASHBOARD ===== -->
+        <section class="page active" id="page-dashboard">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card accent">
+                    <span class="stat-icon-bg"><i class="fas fa-futbol"></i></span>
+                    <div class="label">Today's Matches</div>
+                    <div class="value" id="statMatches">0</div>
+                </div>
+                <div class="stat-card success">
+                    <span class="stat-icon-bg"><i class="fas fa-chart-simple"></i></span>
+                    <div class="label">Predictions</div>
+                    <div class="value" id="statPredictions">0</div>
+                </div>
+                <div class="stat-card warning">
+                    <span class="stat-icon-bg"><i class="fas fa-trophy"></i></span>
+                    <div class="label">Leagues</div>
+                    <div class="value" id="statLeagues">0</div>
+                </div>
+                <div class="stat-card danger">
+                    <span class="stat-icon-bg"><i class="fas fa-broadcast"></i></span>
+                    <div class="label">Live</div>
+                    <div class="value" id="statLive">0</div>
+                </div>
+            </div>
+
+            <div class="bet-day" id="betOfDay">
+                <div class="label"><i class="fas fa-trophy"></i> 🏆 Bet of the Day</div>
+                <div class="match" id="betMatch">Loading...</div>
+                <div class="prediction" id="betPicks"></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fas fa-list-ul"></i> Today's Predictions <span style="font-size:11px;font-weight:400;color:var(--text-secondary);margin-left:6px;">⭐ Safe picks with mixed bets</span></div>
+                <div class="prediction-grid" id="todayPredictions">
+                    <div style="text-align:center;padding:20px;color:var(--text-secondary);font-weight:500;">No predictions for today.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PAGE: PREDICTIONS ===== -->
+        <section class="page" id="page-predictions">
+            <div class="page-title"><i class="fas fa-bullseye"></i> Predictions <span class="accent-line"></span></div>
+            <div id="predictionsContainer"></div>
+        </section>
+
+        <!-- ===== PAGE: INSIGHTS ===== -->
+        <section class="page" id="page-insights">
+            <div class="page-title"><i class="fas fa-lightbulb"></i> Match Insights <span class="accent-line"></span></div>
+            <div id="insightsContainer"></div>
+        </section>
+
+        <!-- ===== PAGE: TRACKING ===== -->
+        <section class="page" id="page-tracking">
+            <div class="page-title"><i class="fas fa-clipboard-list"></i> Performance Tracker <span class="accent-line"></span></div>
+            <div class="tracking-stats-grid" id="trackingStatsGrid"></div>
+            <div class="tracking-filter">
+                <select id="trackingTypeFilter">
+                    <option value="all">All Types</option>
+                    <option value="1x2">1X2</option>
+                    <option value="gg">Goal Goal</option>
+                    <option value="over25">Over 2.5</option>
+                </select>
+                <button class="btn-clear" id="clearTrackingFilters">Clear Filters</button>
+            </div>
+            <div class="card">
+                <div class="table-wrap" id="trackingTableWrap">
+                    <table id="trackingTable">
+                        <thead><tr><th>Date</th><th>Match</th><th>League</th><th>Prediction</th><th>Actual</th><th>Result</th></tr></thead>
+                        <tbody id="trackingTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PAGE: FIXTURES ===== -->
+        <section class="page" id="page-fixtures">
+            <div class="page-title"><i class="fas fa-calendar-alt"></i> Fixtures <span class="accent-line"></span></div>
+            <div class="fixture-controls">
+                <select id="fixtureLeagueFilter"><option value="all">All Leagues</option></select>
+                <select id="fixtureStatusFilter">
+                    <option value="all">All Status</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="live">Live</option>
+                    <option value="finished">Finished</option>
+                </select>
+                <input type="date" id="fixtureDateFilter" />
+                <button class="btn-clear" id="clearFixtureFilters">Clear Filters</button>
+            </div>
+            <div class="fixture-list" id="fixtureList"></div>
+        </section>
+
+        <!-- ===== PAGE: TABLES ===== -->
+        <section class="page" id="page-tables">
+            <div class="page-title"><i class="fas fa-table"></i> League Tables <span class="accent-line"></span></div>
+            <div style="margin-bottom:14px;">
+                <select id="tableLeagueSelect" style="padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border-color);background:var(--bg-input);color:var(--text-primary);font-size:13px;font-weight:500;min-width:180px;"></select>
+            </div>
+            <div class="card">
+                <div class="table-wrap" id="tableContainer"></div>
+            </div>
+        </section>
+
+        <!-- ===== PAGE: ADMIN ===== -->
+        <section class="page" id="page-admin">
+            <div class="page-title"><i class="fas fa-user-shield"></i> Admin Panel <span class="accent-line"></span></div>
+            <div class="admin-login" id="adminLogin">
+                <div class="lock"><i class="fas fa-lock"></i></div>
+                <h2>Admin Access</h2>
+                <p>Enter your credentials to manage data.</p>
+                <div class="input-group">
+                    <input type="password" id="adminPasswordInput" placeholder="Enter password" />
+                    <button id="adminLoginBtn">Unlock</button>
+                </div>
+                <div class="error" id="adminLoginError"></div>
+            </div>
+            <div class="admin-panel" id="adminPanel">
+                <div class="admin-grid">
+                    <div class="admin-section">
+                        <h3><i class="fas fa-trophy"></i> Leagues</h3>
+                        <div class="form-group">
+                            <label>Add League</label>
+                            <div style="display:flex;gap:8px;">
+                                <input type="text" id="adminLeagueName" placeholder="League name" style="flex:1;" />
+                                <button class="btn-primary" id="adminAddLeagueBtn">Add</button>
+                            </div>
+                        </div>
+                        <div class="item-list" id="adminLeagueList"></div>
+                    </div>
+                    <div class="admin-section">
+                        <h3><i class="fas fa-users"></i> Teams</h3>
+                        <div class="form-group">
+                            <label>Add Team</label>
+                            <select id="adminTeamLeagueSelect" style="margin-bottom:6px;"></select>
+                            <div style="display:flex;gap:8px;">
+                                <input type="text" id="adminTeamName" placeholder="Team name" style="flex:1;" />
+                                <button class="btn-primary" id="adminAddTeamBtn">Add</button>
+                            </div>
+                        </div>
+                        <div class="item-list" id="adminTeamList"></div>
+                    </div>
+                    <div class="admin-section">
+                        <h3><i class="fas fa-calendar-plus"></i> Fixtures</h3>
+                        <div class="form-group">
+                            <label>Add / Update Fixture</label>
+                            <select id="adminFixtureLeague" style="margin-bottom:4px;"></select>
+                            <select id="adminFixtureHome" style="margin-bottom:4px;"></select>
+                            <select id="adminFixtureAway" style="margin-bottom:4px;"></select>
+                            <input type="date" id="adminFixtureDate" style="margin-bottom:4px;" />
+                            <input type="time" id="adminFixtureTime" style="margin-bottom:4px;" />
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                <input type="number" id="adminFixtureHomeScore" placeholder="Home score" style="width:70px;" />
+                                <input type="number" id="adminFixtureAwayScore" placeholder="Away score" style="width:70px;" />
+                                <select id="adminFixtureStatus" style="flex:1;">
+                                    <option value="scheduled">Scheduled</option>
+                                    <option value="live">Live</option>
+                                    <option value="finished">Finished</option>
+                                </select>
+                            </div>
+                            <div style="display:flex;gap:8px;margin-top:8px;">
+                                <button class="btn-primary" id="adminAddFixtureBtn">Add</button>
+                                <button class="btn-outline" id="adminUpdateFixtureBtn">Update</button>
+                            </div>
+                            <input type="hidden" id="adminEditFixtureId" />
+                        </div>
+                        <div class="item-list" id="adminFixtureList" style="max-height:150px;"></div>
+                    </div>
+
+                    <div class="admin-section facebook-tools">
+                        <h3><i class="fab fa-facebook"></i> Facebook Integration</h3>
+                        <div class="facebook-status" id="facebookStatus"><span class="dot"></span><span id="facebookStatusText">Not connected</span></div>
+                        <div class="form-group">
+                            <label>Facebook Page URL</label>
+                            <input type="url" id="facebookPageUrl" placeholder="https://www.facebook.com/yourpage" />
+                        </div>
+                        <div class="form-group">
+                            <label>Secure publish endpoint (optional)</label>
+                            <input type="url" id="facebookPublishEndpoint" placeholder="https://your-server.example/api/facebook/publish" />
+                        </div>
+                        <div class="facebook-actions">
+                            <button class="btn-primary btn-facebook" id="saveFacebookSettingsBtn"><i class="fas fa-save"></i> Save</button>
+                            <button class="btn-outline btn-facebook-outline" id="openFacebookPageBtn"><i class="fab fa-facebook"></i> Open Page</button>
+                            <button class="btn-outline" id="shareCurrentPredictionBtn"><i class="fas fa-share-alt"></i> Share Prediction</button>
+                            <button class="btn-outline" id="publishFacebookBtn"><i class="fab fa-facebook"></i> Publish</button>
+                        </div>
+                        <div class="facebook-note">Manual sharing works directly from this HTML. Automatic posting to your Facebook Page requires a secure backend endpoint holding your Meta Page access token. Never put the token inside this HTML file.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ===== AI ASSISTANT ===== -->
+    <button class="ai-toggle" id="aiToggle">
+        <i class="fas fa-robot"></i> AI Assistant
+        <span class="ai-badge">⚡</span>
+    </button>
+    <div class="ai-assistant" id="aiAssistant">
+        <div class="header">
+            <h4><i class="fas fa-robot"></i> AI Betting Assistant</h4>
+            <span class="close" id="closeAi">&times;</span>
+        </div>
+        <div class="body" id="aiBody">
+            <div class="ai-message">
+                <span class="icon">🤖</span> <strong>Welcome!</strong> I analyze your data to provide smart betting advice.
+            </div>
+            <div id="aiContent">Loading insights...</div>
+        </div>
+        <div class="footer">
+            <input type="text" id="aiInput" placeholder="Ask about matches..." />
+            <button id="aiSendBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- ===== BET SLIP ===== -->
+    <button class="bet-slip-toggle" id="betSlipToggle">
+        <i class="fas fa-ticket-alt"></i> Bet Slip
+        <span class="count" id="betSlipCount">0</span>
+    </button>
+    <div class="bet-slip-modal" id="betSlipModal">
+        <div class="header">
+            <h3><i class="fas fa-ticket-alt"></i> Auto Bet Slip</h3>
+            <span class="close" id="closeBetSlip">&times;</span>
+        </div>
+        <div id="betSlipItems"><div style="text-align:center;color:var(--text-secondary);padding:16px 0;">Loading auto picks...</div></div>
+        <div class="slip-total"><span>Total Selections</span><span id="slipTotal">0</span></div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+            <button id="shareBetSlipFacebookBtn" class="btn-facebook" style="flex:1;min-width:150px;padding:9px 12px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;">
+                <i class="fab fa-facebook"></i> Share Bet Slip
+            </button>
+        </div>
+        <div style="font-size:10px;color:var(--text-light);line-height:1.45;margin-top:8px;text-align:center;">
+            Shares the complete bet slip to your linked Facebook Page through your secure publish endpoint.
+        </div>
+    </div>
+
+    <!-- ===== CALENDAR MODAL ===== -->
+    <div class="modal-overlay" id="calendarModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-calendar-alt"></i> Match Calendar</h2>
+                <span class="close" id="closeCalendarBtn">&times;</span>
+            </div>
+            <div class="calendar-nav">
+                <button id="calPrev"><i class="fas fa-chevron-left"></i></button>
+                <span class="month-label" id="calMonthLabel">January 2025</span>
+                <button id="calNext"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="calendar-grid" id="calGrid"></div>
+            <div class="calendar-fixtures" id="calFixtures"><div class="cf-empty">Select a date to see fixtures.</div></div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST CONTAINER ===== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ============================================================
+        //  DATA STORE
+        // ============================================================
+        const DEFAULT_DATA = {
+            leagues: [
+                { id: 'l1', name: 'Premier League' },
+                { id: 'l2', name: 'La Liga' },
+                { id: 'l3', name: 'Serie A' },
+                { id: 'l4', name: 'Bundesliga' },
+            ],
+            teams: [
+                { id: 't1', name: 'Liverpool', leagueId: 'l1' },
+                { id: 't2', name: 'Manchester City', leagueId: 'l1' },
+                { id: 't3', name: 'Arsenal', leagueId: 'l1' },
+                { id: 't4', name: 'Chelsea', leagueId: 'l1' },
+                { id: 't5', name: 'Tottenham', leagueId: 'l1' },
+                { id: 't6', name: 'Barcelona', leagueId: 'l2' },
+                { id: 't7', name: 'Real Madrid', leagueId: 'l2' },
+                { id: 't8', name: 'Atletico Madrid', leagueId: 'l2' },
+                { id: 't9', name: 'Sevilla', leagueId: 'l2' },
+                { id: 't10', name: 'Inter Milan', leagueId: 'l3' },
+                { id: 't11', name: 'AC Milan', leagueId: 'l3' },
+                { id: 't12', name: 'Juventus', leagueId: 'l3' },
+                { id: 't13', name: 'Roma', leagueId: 'l3' },
+                { id: 't14', name: 'Bayern Munich', leagueId: 'l4' },
+                { id: 't15', name: 'Borussia Dortmund', leagueId: 'l4' },
+                { id: 't16', name: 'RB Leipzig', leagueId: 'l4' },
+                { id: 't17', name: 'Bayer Leverkusen', leagueId: 'l4' },
+            ],
+            fixtures: [],
+            tracking: { history: [], stats: { total1x2: 0, correct1x2: 0, totalGG: 0, correctGG: 0, totalOver15: 0, correctOver15: 0, totalOver25: 0, correctOver25: 0, totalOver35: 0, correctOver35: 0 } }
+        };
+
+        function seedFixtures() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayAfter = new Date(today); dayAfter.setDate(dayAfter.getDate() + 2);
+            const fmtDate = (d) => getLocalDateKey(d);
+            const pairs = [
+                { h: 'Liverpool', a: 'Arsenal', l: 'l1', d: today, t: '15:00' },
+                { h: 'Manchester City', a: 'Chelsea', l: 'l1', d: today, t: '17:30' },
+                { h: 'Tottenham', a: 'Liverpool', l: 'l1', d: tomorrow, t: '13:00' },
+                { h: 'Barcelona', a: 'Real Madrid', l: 'l2', d: today, t: '20:00' },
+                { h: 'Atletico Madrid', a: 'Sevilla', l: 'l2', d: tomorrow, t: '18:00' },
+                { h: 'Inter Milan', a: 'AC Milan', l: 'l3', d: today, t: '19:45' },
+                { h: 'Juventus', a: 'Roma', l: 'l3', d: dayAfter, t: '20:45' },
+                { h: 'Bayern Munich', a: 'Borussia Dortmund', l: 'l4', d: tomorrow, t: '16:30' },
+                { h: 'RB Leipzig', a: 'Bayer Leverkusen', l: 'l4', d: dayAfter, t: '14:30' },
+                { h: 'Arsenal', a: 'Tottenham', l: 'l1', d: dayAfter, t: '12:30' },
+                { h: 'Real Madrid', a: 'Atletico Madrid', l: 'l2', d: dayAfter, t: '21:00' },
+                { h: 'AC Milan', a: 'Juventus', l: 'l3', d: tomorrow, t: '15:00' },
+            ];
+            let id = 1; const fixtures = [];
+            pairs.forEach(p => {
+                const homeTeam = DEFAULT_DATA.teams.find(t => t.name === p.h);
+                const awayTeam = DEFAULT_DATA.teams.find(t => t.name === p.a);
+                if (!homeTeam || !awayTeam) return;
+                const isPast = p.d < today;
+                let status = 'scheduled', hs = null, as = null;
+                if (isPast) { status = 'finished'; hs = Math.floor(Math.random() * 4); as = Math.floor(Math.random() * 4); if (Math.random() > 0.5) as = hs; }
+                else if (p.d.getTime() === today.getTime() && Math.random() > 0.7) { status = 'live'; hs = Math.floor(Math.random() * 3); as = Math.floor(Math.random() * 3); }
+                fixtures.push({ id: 'f' + String(id++).padStart(3,'0'), leagueId: p.l, homeTeamId: homeTeam.id, awayTeamId: awayTeam.id, date: fmtDate(p.d), time: p.t, homeScore: hs, awayScore: as, status });
+            });
+            return fixtures;
+        }
+
+        function loadData() {
+            try {
+                const saved = localStorage.getItem('betTrackerData');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (!data.leagues) data.leagues = DEFAULT_DATA.leagues;
+                    if (!data.teams) data.teams = DEFAULT_DATA.teams;
+                    if (!data.fixtures) data.fixtures = seedFixtures();
+                    if (!data.tracking) data.tracking = { history: [], stats: { total1x2: 0, correct1x2: 0, totalGG: 0, correctGG: 0, totalOver15: 0, correctOver15: 0, totalOver25: 0, correctOver25: 0, totalOver35: 0, correctOver35: 0 } };
+                    return data;
+                }
+            } catch(e) {}
+            return resetData();
+        }
+
+        function resetData() {
+            const data = {
+                leagues: JSON.parse(JSON.stringify(DEFAULT_DATA.leagues)),
+                teams: JSON.parse(JSON.stringify(DEFAULT_DATA.teams)),
+                fixtures: seedFixtures(),
+                tracking: { history: [], stats: { total1x2: 0, correct1x2: 0, totalGG: 0, correctGG: 0, totalOver15: 0, correctOver15: 0, totalOver25: 0, correctOver25: 0, totalOver35: 0, correctOver35: 0 } }
+            };
+            saveData(data);
+            return data;
+        }
+
+        function saveData(data) { try { localStorage.setItem('betTrackerData', JSON.stringify(data)); } catch(e) {} }
+
+        let APP_DATA = loadData();
+        let ADMIN_AUTH = false;
+        const ADMIN_PASSWORD = 'admin123';
+        let tickerInterval = null;
+
+        function getTeam(id) { return APP_DATA.teams.find(t => t.id === id); }
+        function getLeague(id) { return APP_DATA.leagues.find(l => l.id === id); }
+        function getTeamsByLeague(leagueId) { return APP_DATA.teams.filter(t => t.leagueId === leagueId); }
+        function getFixtureTeams(f) { const h = getTeam(f.homeTeamId); const a = getTeam(f.awayTeamId); return { home: h ? h.name : '?', away: a ? a.name : '?' }; }
+        function getLeagueName(id) { const l = getLeague(id); return l ? l.name : 'Unknown'; }
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Date TBD';
+            const d = new Date(dateStr + 'T00:00:00');
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        // Use the browser's local date instead of UTC so Kenya/East Africa
+        // users do not see the previous/next day around midnight.
+        function getLocalDateKey(dateObj = new Date()) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getTodayStr() { return getLocalDateKey(); }
+
+        function getFixtureDateTime(f) {
+            const time = f.time || '00:00';
+            return new Date(`${f.date}T${time}:00`);
+        }
+
+        function getNextClosestFixture(referenceDate = new Date()) {
+            const now = referenceDate.getTime();
+            return APP_DATA.fixtures
+                .filter(f => f.status !== 'finished' && f.date)
+                .map(f => ({ fixture: f, timestamp: getFixtureDateTime(f).getTime() }))
+                .filter(x => !Number.isNaN(x.timestamp) && x.timestamp >= now)
+                .sort((a, b) => a.timestamp - b.timestamp)[0]?.fixture || null;
+        }
+
+        function syncCalendarToToday() {
+            const todayStr = getTodayStr();
+            const now = new Date();
+
+            calDate = new Date(now.getFullYear(), now.getMonth(), 1);
+
+            const todayFixtures = APP_DATA.fixtures.filter(f =>
+                f.date === todayStr && f.status !== 'finished'
+            );
+
+            // Prefer today's matches. If there are none, select the closest
+            // upcoming match so the calendar never unnecessarily stays empty.
+            const nextFixture = getNextClosestFixture(now);
+            calSelectedDate = todayFixtures.length
+                ? todayStr
+                : (nextFixture ? nextFixture.date : todayStr);
+
+            return { todayStr, todayFixtures, nextFixture };
+        }
+        function getStatusBadge(status) { const map = { scheduled: 'Scheduled', live: '🔴 Live', finished: '✓ Finished' }; return map[status] || status; }
+        function getStatusClass(status) { return status; }
+
+        // ============================================================
+        //  PREDICTION ENGINE
+        // ============================================================
+        function generatePredictions(fixture) {
+            const hTeam = getTeam(fixture.homeTeamId);
+            const aTeam = getTeam(fixture.awayTeamId);
+            if (!hTeam || !aTeam) return null;
+
+            const hash = (s) => { let h = 0; for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) & 0x7fffffff; } return h; };
+            const hStr = hash(hTeam.name) % 100;
+            const aStr = hash(aTeam.name) % 100;
+            const total = hStr + aStr || 1;
+
+            let homeProb = hStr / total, awayProb = aStr / total, drawProb = 1 - homeProb - awayProb;
+            const sum = homeProb + awayProb + drawProb;
+            homeProb /= sum; awayProb /= sum; drawProb /= sum;
+
+            let pick1x2 = '1';
+            if (drawProb > homeProb && drawProb > awayProb) pick1x2 = 'X';
+            else if (awayProb > homeProb) pick1x2 = '2';
+
+            const baseTotal = 1.5 + ((hStr + aStr) % 50) / 20;
+            const ggProb = 0.4 + ((hStr + aStr) % 50) / 100;
+            const gg = ggProb > 0.5 ? 'GG' : 'No GG';
+
+            let goals = baseTotal;
+            if (pick1x2 !== 'X' && gg === 'GG') { if (goals < 2.8) goals = 3.0; }
+            if (pick1x2 === 'X' && gg === 'GG') { goals = 2.0; }
+
+            const over15 = goals > 1.5;
+            const over25 = goals > 2.5;
+            const over35 = goals > 3.5;
+            const confidence = 0.5 + ((hStr + aStr) % 50) / 100;
+
+            const reasons = {
+                pick1x2: pick1x2 === '1' ? `${hTeam.name} have a stronger home record.` :
+                    pick1x2 === '2' ? `${aTeam.name} are in superior form.` :
+                    'Both teams are evenly matched, draw likely.',
+                gg: gg === 'GG' ? 'Both teams have scoring potential.' : 'At least one team struggles offensively.',
+                over15: over15 ? 'Attacking records suggest more than 1.5 goals.' : 'A low‑scoring affair is expected.',
+                over25: over25 ? 'High‑scoring trends point to 3+ goals.' : 'This fixture is likely to be tight, under 2.5.',
+                over35: over35 ? 'Both teams in goal‑scoring form, 4+ goals possible.' : 'A cagey contest, under 3.5.',
+            };
+
+            return { fixtureId: fixture.id, pick1x2, gg, over15, over25, over35, confidence: Math.min(confidence, 0.95), reasons };
+        }
+
+        function getPredictionsForFixture(fixtureId) {
+            const f = APP_DATA.fixtures.find(fx => fx.id === fixtureId);
+            if (!f) return null;
+            return generatePredictions(f);
+        }
+
+        function getSafeBet(pred) {
+            if (!pred) return 'No bet';
+            const candidates = [];
+            if (pred.over15) candidates.push({ label: 'Over 1.5', weight: 0.7 });
+            if (pred.over25) candidates.push({ label: 'Over 2.5', weight: 0.8 });
+            if (pred.over35) candidates.push({ label: 'Over 3.5', weight: 0.6 });
+            if (pred.gg === 'GG') candidates.push({ label: 'GG', weight: 0.75 });
+            candidates.push({ label: pred.pick1x2 === '1' ? 'Home Win' : pred.pick1x2 === '2' ? 'Away Win' : 'Draw', weight: 0.9 });
+            candidates.sort((a,b) => b.weight - a.weight);
+            return candidates.length > 0 ? candidates[0].label : '1X2';
+        }
+
+        // ============================================================
+        //  BET OF THE DAY - Random from all leagues
+        // ============================================================
+        function getBetOfTheDay() {
+            const allFixtures = APP_DATA.fixtures.filter(f => f.status !== 'finished');
+            if (allFixtures.length === 0) return null;
+            const randomIndex = Math.floor(Math.random() * allFixtures.length);
+            const selected = allFixtures[randomIndex];
+            return generatePredictions(selected);
+        }
+
+        // ============================================================
+        //  AUTO BET SLIP - 5 games across all leagues
+        // ============================================================
+        function generateAutoBetSlip() {
+            const allFixtures = APP_DATA.fixtures.filter(f => f.status !== 'finished');
+            if (allFixtures.length === 0) return [];
+
+            const shuffled = [...allFixtures].sort(() => Math.random() - 0.5);
+            const selected = shuffled.slice(0, Math.min(5, shuffled.length));
+
+            return selected.map(f => {
+                const pred = generatePredictions(f);
+                const teams = getFixtureTeams(f);
+                const safePick = pred ? getSafeBet(pred) : 'N/A';
+                const conf = pred ? Math.round(pred.confidence * 100) : 0;
+                return {
+                    fixture: f,
+                    teams: teams,
+                    pred: pred,
+                    pick: safePick,
+                    confidence: conf
+                };
+            });
+        }
+
+        // ============================================================
+        //  TRACKING
+        // ============================================================
+        function updateTrackingForFixture(fixtureId) {
+            const f = APP_DATA.fixtures.find(fx => fx.id === fixtureId);
+            if (!f || f.status !== 'finished' || f.homeScore === null || f.awayScore === null) return;
+            const pred = generatePredictions(f);
+            if (!pred) return;
+
+            const homeScore = f.homeScore, awayScore = f.awayScore, total = homeScore + awayScore;
+            let actual1x2 = '1';
+            if (homeScore < awayScore) actual1x2 = '2';
+            else if (homeScore === awayScore) actual1x2 = 'X';
+
+            const actualGG = (homeScore > 0 && awayScore > 0);
+            const actualOver15 = total > 1.5, actualOver25 = total > 2.5, actualOver35 = total > 3.5;
+
+            const correct1x2 = pred.pick1x2 === actual1x2;
+            const correctGG = (pred.gg === 'GG') === actualGG;
+            const correctOver15 = pred.over15 === actualOver15;
+            const correctOver25 = pred.over25 === actualOver25;
+            const correctOver35 = pred.over35 === actualOver35;
+
+            const teams = getFixtureTeams(f);
+            const existingIdx = APP_DATA.tracking.history.findIndex(h => h.fixtureId === fixtureId);
+            const entry = {
+                fixtureId, date: f.date, league: getLeagueName(f.leagueId),
+                homeTeam: teams.home, awayTeam: teams.away,
+                homeScore, awayScore,
+                prediction: { pick1x2: pred.pick1x2, gg: pred.gg, over15: pred.over15, over25: pred.over25, over35: pred.over35 },
+                actual: { pick1x2: actual1x2, gg: actualGG, over15: actualOver15, over25: actualOver25, over35: actualOver35 },
+                correct: { pick1x2: correct1x2, gg: correctGG, over15: correctOver15, over25: correctOver25, over35: correctOver35 },
+                timestamp: Date.now()
+            };
+
+            if (existingIdx >= 0) APP_DATA.tracking.history[existingIdx] = entry;
+            else APP_DATA.tracking.history.push(entry);
+
+            const stats = APP_DATA.tracking.stats = { total1x2: 0, correct1x2: 0, totalGG: 0, correctGG: 0, totalOver15: 0, correctOver15: 0, totalOver25: 0, correctOver25: 0, totalOver35: 0, correctOver35: 0 };
+            APP_DATA.tracking.history.forEach(h => {
+                stats.total1x2++; if (h.correct.pick1x2) stats.correct1x2++;
+                stats.totalGG++; if (h.correct.gg) stats.correctGG++;
+                stats.totalOver15++; if (h.correct.over15) stats.correctOver15++;
+                stats.totalOver25++; if (h.correct.over25) stats.correctOver25++;
+                stats.totalOver35++; if (h.correct.over35) stats.correctOver35++;
+            });
+            saveData(APP_DATA);
+        }
+
+        function trackAllFinishedFixtures() {
+            APP_DATA.fixtures.filter(f => f.status === 'finished' && f.homeScore !== null && f.awayScore !== null)
+                .forEach(f => updateTrackingForFixture(f.id));
+            saveData(APP_DATA);
+        }
+
+        // ============================================================
+        //  DYNAMIC NEWS TICKER
+        // ============================================================
+        function generateTickerItems() {
+            const items = [];
+            const today = getTodayStr();
+            const liveFixtures = APP_DATA.fixtures.filter(f => f.status === 'live');
+            const todayFixtures = APP_DATA.fixtures.filter(f => f.date === today && f.status !== 'finished');
+
+            liveFixtures.forEach(f => {
+                const teams = getFixtureTeams(f);
+                const score = `${f.homeScore ?? 0} - ${f.awayScore ?? 0}`;
+                const league = getLeagueName(f.leagueId);
+                items.push(`🔴 <span class="highlight">LIVE:</span> ${teams.home} vs ${teams.away} (${score}) - ${league}`);
+            });
+
+            const betPred = getBetOfTheDay();
+            if (betPred) {
+                const f = APP_DATA.fixtures.find(fx => fx.id === betPred.fixtureId);
+                if (f) {
+                    const teams = getFixtureTeams(f);
+                    const safe = getSafeBet(betPred);
+                    const conf = Math.round(betPred.confidence * 100);
+                    items.push(`⭐ <span class="success-text">BET OF THE DAY:</span> ${teams.home} vs ${teams.away} - <span class="highlight">${safe}</span> (${conf}% confidence)`);
+                }
+            }
+
+            const highConf = APP_DATA.fixtures.filter(f => f.status !== 'finished')
+                .map(f => ({ fixture: f, pred: generatePredictions(f) }))
+                .filter(item => item.pred && item.pred.confidence > 0.7)
+                .sort((a, b) => b.pred.confidence - a.pred.confidence)
+                .slice(0, 3);
+
+            highConf.forEach(item => {
+                const teams = getFixtureTeams(item.fixture);
+                const league = getLeagueName(item.fixture.leagueId);
+                const pred = item.pred;
+                const picks = [];
+                if (pred.pick1x2 !== 'X') picks.push(pred.pick1x2 === '1' ? `${teams.home} win` : `${teams.away} win`);
+                if (pred.gg === 'GG') picks.push('GG');
+                if (pred.over25) picks.push('Over 2.5');
+                if (picks.length === 0) picks.push('Draw');
+                items.push(`📊 <span class="highlight">${teams.home}</span> vs <span class="highlight">${teams.away}</span> - ${league} | Pick: ${picks.join(' + ')} (${Math.round(pred.confidence * 100)}%)`);
+            });
+
+            const scheduled = APP_DATA.fixtures.filter(f => f.status === 'scheduled').sort((a,b) => a.date.localeCompare(b.date));
+            if (scheduled.length > 0 && items.length < 8) {
+                const upcoming = scheduled.slice(0, 3);
+                upcoming.forEach(f => {
+                    const teams = getFixtureTeams(f);
+                    const league = getLeagueName(f.leagueId);
+                    const date = formatDate(f.date);
+                    const pred = generatePredictions(f);
+                    const pick = pred ? getSafeBet(pred) : 'TBD';
+                    items.push(`📅 ${teams.home} vs ${teams.away} - ${date} | ${league} | 🔮 ${pick}`);
+                });
+            }
+
+            const stats = APP_DATA.tracking.stats;
+            const totalTracked = APP_DATA.tracking.history.length;
+            if (totalTracked > 0) {
+                const pct1x2 = stats.total1x2 > 0 ? Math.round((stats.correct1x2 / stats.total1x2) * 100) : 0;
+                const pctGG = stats.totalGG > 0 ? Math.round((stats.correctGG / stats.totalGG) * 100) : 0;
+                items.push(`📈 <span class="success-text">TRACKING:</span> 1X2 ${pct1x2}% | GG ${pctGG}% | ${totalTracked} matches tracked`);
+            }
+
+            if (items.length === 0) {
+                items.push('📊 No upcoming matches. Check back later for predictions.');
+            }
+
+            return items;
+        }
+
+        function updateTicker() {
+            const container = document.getElementById('tickerContent');
+            const items = generateTickerItems();
+
+            if (items.length === 0) {
+                container.innerHTML = '<div class="ticker-item active">📊 No data available</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            items.forEach((text, index) => {
+                const div = document.createElement('div');
+                div.className = 'ticker-item' + (index === 0 ? ' active' : '');
+                div.innerHTML = text;
+                container.appendChild(div);
+            });
+
+            if (tickerInterval) clearInterval(tickerInterval);
+            let currentIndex = 0;
+            const allItems = container.querySelectorAll('.ticker-item');
+
+            tickerInterval = setInterval(() => {
+                if (allItems.length === 0) return;
+                allItems.forEach(el => el.classList.remove('active'));
+                currentIndex = (currentIndex + 1) % allItems.length;
+                if (allItems[currentIndex]) {
+                    allItems[currentIndex].classList.add('active');
+                }
+            }, 6000);
+        }
+
+        // ============================================================
+        //  AI ASSISTANT
+        // ============================================================
+        function generateAIAdvice() {
+            const today = getTodayStr();
+            const todayFixtures = APP_DATA.fixtures.filter(f => f.date === today && f.status !== 'finished');
+            const liveFixtures = APP_DATA.fixtures.filter(f => f.status === 'live');
+            const stats = APP_DATA.tracking.stats;
+            const totalTracked = APP_DATA.tracking.history.length;
+
+            let advice = '';
+
+            if (liveFixtures.length > 0) {
+                advice += `<div class="ai-message"><span class="icon">🔴</span> <strong>Live Action:</strong> `;
+                liveFixtures.forEach((f, i) => {
+                    const teams = getFixtureTeams(f);
+                    const pred = generatePredictions(f);
+                    const score = `${f.homeScore ?? 0} - ${f.awayScore ?? 0}`;
+                    advice += `${i > 0 ? ', ' : ''}${teams.home} vs ${teams.away} (${score})`;
+                    if (pred) {
+                        advice += ` - <span class="highlight">${getSafeBet(pred)}</span>`;
+                    }
+                });
+                advice += `</div>`;
+            }
+
+            if (todayFixtures.length > 0) {
+                const betPred = getBetOfTheDay();
+                if (betPred) {
+                    const f = APP_DATA.fixtures.find(fx => fx.id === betPred.fixtureId);
+                    if (f) {
+                        const teams = getFixtureTeams(f);
+                        advice += `<div class="ai-message"><span class="icon">⭐</span> <strong>Best Bet Today:</strong> `;
+                        advice += `${teams.home} vs ${teams.away} - `;
+                        advice += `<span class="highlight">${getSafeBet(betPred)}</span> `;
+                        advice += `with ${Math.round(betPred.confidence * 100)}% confidence. `;
+                        advice += `${betPred.reasons.pick1x2}`;
+                        advice += `</div>`;
+                    }
+                }
+            }
+
+            if (totalTracked > 0) {
+                const pct1x2 = stats.total1x2 > 0 ? Math.round((stats.correct1x2 / stats.total1x2) * 100) : 0;
+                const pctGG = stats.totalGG > 0 ? Math.round((stats.correctGG / stats.totalGG) * 100) : 0;
+                const pctOver25 = stats.totalOver25 > 0 ? Math.round((stats.correctOver25 / stats.totalOver25) * 100) : 0;
+                advice += `<div class="ai-message"><span class="icon">📈</span> <strong>Your Performance:</strong> `;
+                advice += `1X2: <span class="green">${pct1x2}%</span> | `;
+                advice += `GG: <span class="green">${pctGG}%</span> | `;
+                advice += `Over 2.5: <span class="green">${pctOver25}%</span> | `;
+                advice += `${totalTracked} matches tracked.`;
+                if (pct1x2 > 60) advice += ` 🎯 You're doing great!`;
+                else if (pct1x2 < 40) advice += ` 📚 Consider reviewing your strategy.`;
+                advice += `</div>`;
+            }
+
+            const autoPicks = generateAutoBetSlip();
+            if (autoPicks.length > 0) {
+                advice += `<div class="ai-message"><span class="icon">🎫</span> <strong>Auto Bet Slip Picks:</strong><br>`;
+                autoPicks.forEach((pick, i) => {
+                    advice += `${i+1}. ${pick.teams.home} vs ${pick.teams.away} - <span class="highlight">${pick.pick}</span> (${pick.confidence}%)<br>`;
+                });
+                advice += `</div>`;
+            }
+
+            if (!advice) {
+                advice = `<div class="ai-message"><span class="icon">🤖</span> No data available yet. Add some fixtures and start tracking!</div>`;
+            }
+
+            return advice;
+        }
+
+        function updateAI() {
+            document.getElementById('aiContent').innerHTML = generateAIAdvice();
+        }
+
+        function handleAIQuery(query) {
+            const q = query.toLowerCase().trim();
+            if (!q) return;
+
+            let response = '';
+            const today = getTodayStr();
+
+            if (q.includes('best') || q.includes('bet') || q.includes('pick')) {
+                const betPred = getBetOfTheDay();
+                if (betPred) {
+                    const f = APP_DATA.fixtures.find(fx => fx.id === betPred.fixtureId);
+                    if (f) {
+                        const teams = getFixtureTeams(f);
+                        response = `⭐ <strong>Best Bet:</strong> ${teams.home} vs ${teams.away} - <span class="highlight">${getSafeBet(betPred)}</span> (${Math.round(betPred.confidence * 100)}% confidence)`;
+                    }
+                } else {
+                    response = 'No matches available for betting right now.';
+                }
+            } else if (q.includes('performance') || q.includes('tracking') || q.includes('stats')) {
+                const stats = APP_DATA.tracking.stats;
+                const total = APP_DATA.tracking.history.length;
+                const pct1x2 = stats.total1x2 > 0 ? Math.round((stats.correct1x2 / stats.total1x2) * 100) : 0;
+                const pctGG = stats.totalGG > 0 ? Math.round((stats.correctGG / stats.totalGG) * 100) : 0;
+                const pctOver25 = stats.totalOver25 > 0 ? Math.round((stats.correctOver25 / stats.totalOver25) * 100) : 0;
+                response = `📊 <strong>Your Stats:</strong> 1X2: ${pct1x2}% | GG: ${pctGG}% | Over 2.5: ${pctOver25}% | ${total} matches tracked.`;
+                if (pct1x2 > 60) response += ' 🎯 Excellent accuracy!';
+                else if (pct1x2 < 40) response += ' 📚 Consider focusing on higher confidence picks.';
+            } else if (q.includes('live')) {
+                const live = APP_DATA.fixtures.filter(f => f.status === 'live');
+                if (live.length > 0) {
+                    response = '🔴 <strong>Live Matches:</strong> ';
+                    live.forEach(f => {
+                        const teams = getFixtureTeams(f);
+                        response += `${teams.home} ${f.homeScore}-${f.awayScore} ${teams.away}, `;
+                    });
+                    response = response.slice(0, -2);
+                } else {
+                    response = 'No live matches currently.';
+                }
+            } else if (q.includes('today')) {
+                const todayF = APP_DATA.fixtures.filter(f => f.date === today);
+                if (todayF.length > 0) {
+                    response = '📅 <strong>Today\'s Matches:</strong> ';
+                    todayF.forEach(f => {
+                        const teams = getFixtureTeams(f);
+                        const status = f.status === 'live' ? '🔴 LIVE' : f.status === 'finished' ? '✅ Finished' : '⏳ Scheduled';
+                        response += `${teams.home} vs ${teams.away} (${status}), `;
+                    });
+                    response = response.slice(0, -2);
+                } else {
+                    response = 'No matches scheduled for today.';
+                }
+            } else if (q.includes('slip') || q.includes('bet slip')) {
+                const autoPicks = generateAutoBetSlip();
+                if (autoPicks.length > 0) {
+                    response = '🎫 <strong>Auto Bet Slip:</strong><br>';
+                    autoPicks.forEach((pick, i) => {
+                        response += `${i+1}. ${pick.teams.home} vs ${pick.teams.away} - <span class="highlight">${pick.pick}</span> (${pick.confidence}%)<br>`;
+                    });
+                } else {
+                    response = 'No matches available for bet slip.';
+                }
+            } else if (q.includes('help')) {
+                response = '🤖 <strong>I can help with:</strong><br>• "best bet" - Get the top pick<br>• "performance" - View your stats<br>• "live" - Check live matches<br>• "today" - See today\'s fixtures<br>• "slip" - View auto bet slip<br>• Ask about any match!';
+            } else {
+                const matchQuery = q.replace(/vs|v\.|versus/g, '').trim();
+                const matchedFixtures = APP_DATA.fixtures.filter(f => {
+                    const teams = getFixtureTeams(f);
+                    return teams.home.toLowerCase().includes(matchQuery) || teams.away.toLowerCase().includes(matchQuery);
+                });
+
+                if (matchedFixtures.length > 0) {
+                    const f = matchedFixtures[0];
+                    const teams = getFixtureTeams(f);
+                    const pred = generatePredictions(f);
+                    if (pred) {
+                        response = `📊 <strong>${teams.home} vs ${teams.away}</strong> (${getLeagueName(f.leagueId)})<br>`;
+                        response += `• 1X2: <span class="highlight">${pred.pick1x2}</span> (${Math.round(pred.confidence * 100)}%)<br>`;
+                        response += `• Goal Goal: <span class="highlight">${pred.gg}</span><br>`;
+                        response += `• Over 2.5: <span class="highlight">${pred.over25 ? 'Yes' : 'No'}</span><br>`;
+                        response += `• Safe Pick: <span class="green">${getSafeBet(pred)}</span>`;
+                    } else {
+                        response = `No prediction available for ${teams.home} vs ${teams.away}.`;
+                    }
+                } else {
+                    response = `🤔 I couldn't find "${q}". Try asking about a specific match or use "help" for options.`;
+                }
+            }
+
+            const container = document.getElementById('aiContent');
+            container.innerHTML = `<div class="ai-message"><span class="icon">🤖</span> ${response}</div>`;
+        }
+
+        // ============================================================
+        //  RENDER FUNCTIONS
+        // ============================================================
+        function renderDashboard() {
+            try {
+                const today = getTodayStr();
+                const todayFixtures = APP_DATA.fixtures.filter(f => f.date === today);
+                const liveFixtures = APP_DATA.fixtures.filter(f => f.status === 'live');
+                const totalLeagues = APP_DATA.leagues.length;
+
+                // Update stats
+                document.getElementById('statMatches').textContent = todayFixtures.length;
+                document.getElementById('statPredictions').textContent = todayFixtures.filter(f => f.status !== 'finished').length;
+                document.getElementById('statLeagues').textContent = totalLeagues;
+                document.getElementById('statLive').textContent = liveFixtures.length;
+
+                // Bet of the Day
+                const betPred = getBetOfTheDay();
+                if (betPred) {
+                    const f = APP_DATA.fixtures.find(fx => fx.id === betPred.fixtureId);
+                    if (f) {
+                        const teams = getFixtureTeams(f);
+                        document.getElementById('betMatch').innerHTML =
+                            `${teams.home} vs ${teams.away}
+                            <span class="league-tag">${getLeagueName(f.leagueId)}</span>
+                            <span class="league-tag">📅 ${formatDate(f.date)} · ${f.time || 'TBD'}</span>`;
+                        const safe = getSafeBet(betPred);
+                        document.getElementById('betPicks').innerHTML = `
+                            <span class="pill highlight">⭐ ${safe}</span>
+                            <span class="pill">1X2: ${betPred.pick1x2}</span>
+                            <span class="pill">GG: ${betPred.gg}</span>
+                            <span class="pill">O1.5: ${betPred.over15 ? '✅' : '❌'}</span>
+                            <span class="pill">O2.5: ${betPred.over25 ? '✅' : '❌'}</span>
+                            <span class="pill">O3.5: ${betPred.over35 ? '✅' : '❌'}</span>
+                            <span class="pill" style="background:rgba(255,255,255,0.15);">
+                                Confidence: ${Math.round(betPred.confidence * 100)}%
+                                <span class="confidence-bar"><span class="fill" style="width:${betPred.confidence * 100}%;"></span></span>
+                            </span>
+                        `;
+                    }
+                } else {
+                    document.getElementById('betMatch').textContent = 'No matches available';
+                    document.getElementById('betPicks').innerHTML = '<span class="pill">Check back later</span>';
+                }
+
+                // Today's Predictions - show 0 when no matches
+                const container = document.getElementById('todayPredictions');
+                const todays = APP_DATA.fixtures.filter(f => f.date === today && f.status !== 'finished');
+
+                if (todays.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-matches">
+                            <div class="icon"><i class="fas fa-calendar-day"></i></div>
+                            <h4>No Matches Today</h4>
+                            <p>There are no matches scheduled for today. Check the calendar or fixtures page for upcoming games.</p>
+                            <p style="margin-top:6px;font-size:12px;color:var(--text-light);">📅 ${formatDate(today)}</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '';
+                todays.forEach(f => {
+                    const pred = generatePredictions(f);
+                    const teams = getFixtureTeams(f);
+                    const league = getLeagueName(f.leagueId);
+                    const confPct = pred ? Math.round(pred.confidence * 100) : 0;
+                    const safePick = pred ? getSafeBet(pred) : 'N/A';
+
+                    const matchDate = new Date(f.date + 'T' + (f.time || '00:00'));
+                    const dateStr = matchDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    const timeStr = f.time || 'TBD';
+
+                    html += `
+                        <div class="prediction-item">
+                            <div class="match-header">
+                                <div class="teams">${teams.home} <span class="vs">vs</span> ${teams.away}</div>
+                                <div class="match-meta">
+                                    <span class="league-tag">${league}</span>
+                                    <span class="datetime"><i class="far fa-calendar-alt"></i> ${dateStr} | <i class="far fa-clock"></i> ${timeStr}</span>
+                                </div>
+                            </div>
+                            <div class="picks">
+                                <span class="pick ${pred ? (pred.pick1x2 === '1' ? 'confident' : '') : ''}">1X2: ${pred ? pred.pick1x2 : 'N/A'}</span>
+                                <span class="pick ${pred ? (pred.gg === 'GG' ? 'confident' : '') : ''}">GG: ${pred ? pred.gg : 'N/A'}</span>
+                                <span class="pick ${pred ? (pred.over25 ? 'over-pick' : 'under-pick') : ''}">O2.5: ${pred ? (pred.over25 ? '✅ Yes' : '❌ No') : 'N/A'}</span>
+                                <span class="pick ${pred ? (pred.over35 ? 'over-pick' : 'under-pick') : ''}">O3.5: ${pred ? (pred.over35 ? '✅ Yes' : '❌ No') : 'N/A'}</span>
+                                ${pred ? `<span class="odds-display">@ ${(1 + (confPct / 100)).toFixed(2)}</span>` : ''}
+                                ${pred ? `<span class="confidence-display">${confPct}% <span class="confidence-bar"><span class="fill" style="width:${confPct}%;"></span></span></span>` : ''}
+                            </div>
+                            <div class="safe-pick">⭐ Safe Pick: ${safePick}</div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+                updateBetSlip();
+
+            } catch (e) {
+                console.error('Error in renderDashboard:', e);
+                document.getElementById('todayPredictions').innerHTML = '<div class="debug-msg">⚠️ Error loading dashboard.</div>';
+            }
+        }
+
+        function renderPredictionsPage() {
+            const container = document.getElementById('predictionsContainer');
+            const today = getTodayStr();
+            const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayAfter = new Date(); dayAfter.setDate(dayAfter.getDate() + 2);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            const dayAfterStr = dayAfter.toISOString().split('T')[0];
+
+            const dateStrs = [today, tomorrowStr, dayAfterStr];
+            let html = '';
+            dateStrs.forEach(dateStr => {
+                const fixtures = APP_DATA.fixtures.filter(f => f.date === dateStr && f.status !== 'finished');
+                if (fixtures.length === 0) return;
+                const label = dateStr === today ? 'Today' : dateStr === tomorrowStr ? 'Tomorrow' : formatDate(dateStr);
+                html += `<h3 style="margin-top:20px;font-weight:800;font-size:17px;color:var(--text-primary);">📅 ${label}</h3>`;
+                fixtures.forEach(f => {
+                    const pred = generatePredictions(f);
+                    const teams = getFixtureTeams(f);
+                    const league = getLeagueName(f.leagueId);
+                    if (!pred) return;
+                    const confPct = Math.round(pred.confidence * 100);
+                    const safePick = getSafeBet(pred);
+                    const matchDate = new Date(f.date + 'T' + (f.time || '00:00'));
+                    const dateStr2 = matchDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    const timeStr = f.time || 'TBD';
+
+                    html += `
+                        <div class="prediction-item" style="margin-bottom:8px;">
+                            <div class="match-header">
+                                <div class="teams" style="font-weight:800;">${teams.home} <span class="vs">vs</span> ${teams.away}</div>
+                                <div class="match-meta">
+                                    <span class="league-tag">${league}</span>
+                                    <span class="datetime"><i class="far fa-calendar-alt"></i> ${dateStr2} | <i class="far fa-clock"></i> ${timeStr}</span>
+                                </div>
+                            </div>
+                            <div class="picks">
+                                <span class="pick ${pred.pick1x2 === '1' ? 'confident' : ''}">1X2: ${pred.pick1x2}</span>
+                                <span class="pick ${pred.gg === 'GG' ? 'confident' : ''}">GG: ${pred.gg}</span>
+                                <span class="pick ${pred.over25 ? 'over-pick' : 'under-pick'}">O2.5: ${pred.over25 ? '✅ Yes' : '❌ No'}</span>
+                                <span class="pick ${pred.over35 ? 'over-pick' : 'under-pick'}">O3.5: ${pred.over35 ? '✅ Yes' : '❌ No'}</span>
+                                <span class="odds-display">@ ${(1 + (confPct / 100)).toFixed(2)}</span>
+                                <span class="confidence-display">${confPct}% <span class="confidence-bar"><span class="fill" style="width:${confPct}%;"></span></span></span>
+                            </div>
+                            <div class="safe-pick">⭐ Safe Pick: ${safePick}</div>
+                        </div>
+                    `;
+                });
+            });
+            if (!html) html = '<div style="text-align:center;padding:24px;color:var(--text-secondary);font-weight:500;">No upcoming matches with predictions.</div>';
+            container.innerHTML = html;
+        }
+
+        function renderInsightsPage() {
+            const container = document.getElementById('insightsContainer');
+            const today = getTodayStr();
+            const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+            const dayAfter = new Date(); dayAfter.setDate(dayAfter.getDate() + 2);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            const dayAfterStr = dayAfter.toISOString().split('T')[0];
+
+            const dateStrs = [today, tomorrowStr, dayAfterStr];
+            let html = '';
+            dateStrs.forEach(dateStr => {
+                const fixtures = APP_DATA.fixtures.filter(f => f.date === dateStr && f.status !== 'finished');
+                if (fixtures.length === 0) return;
+                const label = dateStr === today ? 'Today' : dateStr === tomorrowStr ? 'Tomorrow' : formatDate(dateStr);
+                html += `<h3 style="margin-top:20px;font-weight:800;font-size:18px;color:var(--text-primary);">📅 ${label}</h3>`;
+                fixtures.forEach(f => {
+                    const pred = generatePredictions(f);
+                    const teams = getFixtureTeams(f);
+                    const league = getLeagueName(f.leagueId);
+                    if (!pred) return;
+                    const confPct = Math.round(pred.confidence * 100);
+                    const reasons = pred.reasons;
+                    const matchDate = new Date(f.date + 'T' + (f.time || '00:00'));
+                    const dateStr2 = matchDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                    const timeStr = f.time || 'TBD';
+
+                    html += `
+                        <div class="card" style="margin-bottom:12px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                                <div style="font-size:18px;font-weight:800;">${teams.home} <span style="color:var(--text-secondary);font-weight:400;font-size:15px;">vs</span> ${teams.away}</div>
+                                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                                    <span style="font-size:11px;font-weight:600;color:var(--text-light);background:var(--status-bg);padding:3px 14px;border-radius:20px;">${league}</span>
+                                    <span style="font-size:11px;color:var(--text-secondary);"><i class="far fa-calendar-alt"></i> ${dateStr2} | <i class="far fa-clock"></i> ${timeStr}</span>
+                                    <span style="display:inline-flex;align-items:center;gap:6px;background:var(--status-bg);padding:3px 14px;border-radius:20px;font-size:12px;font-weight:700;">
+                                        <i class="fas fa-chart-simple"></i> ${confPct}%
+                                        <span style="width:60px;height:3px;background:var(--border-color);border-radius:4px;overflow:hidden;"><span style="height:100%;background:var(--gradient-primary);border-radius:4px;width:${confPct}%;display:block;"></span></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                                ${[
+                                    { label: '1X2', value: pred.pick1x2, reason: reasons.pick1x2 },
+                                    { label: 'Goal Goal', value: pred.gg, reason: reasons.gg },
+                                    { label: 'Over 1.5', value: pred.over15 ? '✅ Yes' : '❌ No', reason: reasons.over15 },
+                                    { label: 'Over 2.5', value: pred.over25 ? '✅ Yes' : '❌ No', reason: reasons.over25 },
+                                    { label: 'Over 3.5', value: pred.over35 ? '✅ Yes' : '❌ No', reason: reasons.over35 },
+                                    { label: '⭐ Safe Pick', value: getSafeBet(pred), reason: `Confidence ${confPct}%`, highlight: true }
+                                ].map(item => `
+                                    <div style="background:var(--bg-input);border-radius:var(--radius-sm);padding:10px 14px;border-left:3px solid ${item.highlight ? 'var(--kenyan-gold)' : 'var(--glow-green)'};">
+                                        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-secondary);">${item.label}</div>
+                                        <div style="font-size:14px;font-weight:700;margin-top:1px;color:${item.highlight ? 'var(--glow-green)' : 'var(--text-primary)'};">${item.value}</div>
+                                        <div style="font-size:12px;color:var(--text-secondary);margin-top:3px;font-weight:400;line-height:1.4;">${item.reason}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+            if (!html) html = '<div style="text-align:center;padding:32px;color:var(--text-secondary);font-weight:500;">No upcoming matches with insights available.</div>';
+            container.innerHTML = html;
+        }
+
+        function renderTrackingPage() {
+            const typeFilter = document.getElementById('trackingTypeFilter').value;
+            let history = [...APP_DATA.tracking.history];
+            history.sort((a, b) => b.date.localeCompare(a.date) || b.timestamp - a.timestamp);
+
+            if (typeFilter !== 'all') {
+                history = history.filter(h => {
+                    switch(typeFilter) {
+                        case '1x2': return true;
+                        case 'gg': return true;
+                        case 'over25': return true;
+                        default: return true;
+                    }
+                });
+            }
+
+            const stats = APP_DATA.tracking.stats;
+            const totalEntries = APP_DATA.tracking.history.length;
+            const totalCorrect1x2 = stats.correct1x2, total1x2 = stats.total1x2 || 1;
+            const totalCorrectGG = stats.correctGG, totalGG = stats.totalGG || 1;
+            const totalCorrectOver25 = stats.correctOver25, totalOver25 = stats.totalOver25 || 1;
+
+            const statsGrid = document.getElementById('trackingStatsGrid');
+            statsGrid.innerHTML = `
+                <div class="tracking-stat-card"><div class="num">${totalEntries}</div><div class="lbl">Total Tracked</div></div>
+                <div class="tracking-stat-card"><div class="num correct">${totalCorrect1x2}/${total1x2}</div><div class="lbl">1X2</div></div>
+                <div class="tracking-stat-card"><div class="num correct">${totalCorrectGG}/${totalGG}</div><div class="lbl">Goal Goal</div></div>
+                <div class="tracking-stat-card"><div class="num correct">${totalCorrectOver25}/${totalOver25}</div><div class="lbl">Over 2.5</div></div>
+            `;
+
+            const tableBody = document.getElementById('trackingTableBody');
+            if (history.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-secondary);font-weight:500;">No tracked predictions yet.</td></tr>';
+                return;
+            }
+
+            let rows = '';
+            history.forEach(h => {
+                const predStr = `${h.prediction.pick1x2} | ${h.prediction.gg} | O2.5 ${h.prediction.over25 ? '✓' : '✗'}`;
+                const actualStr = `${h.actual.pick1x2} | ${h.actual.gg ? 'GG' : 'NG'} | O2.5 ${h.actual.over25 ? '✓' : '✗'}`;
+                const correctCount = Object.values(h.correct).filter(v => v === true).length;
+                const totalCount = Object.values(h.correct).length;
+                let statusClass = 'pending', statusText = 'Pending';
+                if (correctCount === totalCount) { statusClass = 'correct'; statusText = '✅ Correct'; }
+                else if (correctCount === 0) { statusClass = 'incorrect'; statusText = '❌ Incorrect'; }
+                else { statusClass = 'correct'; statusText = `⚠️ ${correctCount}/${totalCount}`; }
+
+                rows += `
+                    <tr>
+                        <td style="font-weight:500;font-size:11px;">${formatDate(h.date)}</td>
+                        <td style="font-weight:600;font-size:12px;">${h.homeTeam} vs ${h.awayTeam}</td>
+                        <td style="font-size:11px;color:var(--text-secondary);font-weight:500;">${h.league}</td>
+                        <td class="pick-cell" style="font-size:11px;">${predStr}</td>
+                        <td class="pick-cell" style="font-size:11px;color:var(--text-secondary);">${actualStr}</td>
+                        <td><span class="status-badge ${statusClass}" style="font-size:10px;">${statusText}</span></td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = rows;
+        }
+
+        function renderFixtures() {
+            try {
+                const leagueFilter = document.getElementById('fixtureLeagueFilter').value;
+                const statusFilter = document.getElementById('fixtureStatusFilter').value;
+                const dateFilter = document.getElementById('fixtureDateFilter').value;
+
+                let fixtures = [...APP_DATA.fixtures];
+                if (leagueFilter !== 'all') fixtures = fixtures.filter(f => f.leagueId === leagueFilter);
+                if (statusFilter !== 'all') fixtures = fixtures.filter(f => f.status === statusFilter);
+                if (dateFilter) fixtures = fixtures.filter(f => f.date === dateFilter);
+                fixtures.sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+
+                const container = document.getElementById('fixtureList');
+                if (fixtures.length === 0) {
+                    container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);font-weight:500;">No fixtures match the filters.</div>';
+                    return;
+                }
+
+                let html = '';
+                fixtures.forEach(f => {
+                    const teams = getFixtureTeams(f);
+                    const league = getLeagueName(f.leagueId);
+                    const scoreDisplay = f.status === 'finished' || f.status === 'live' ? `${f.homeScore ?? '?'} – ${f.awayScore ?? '?'}` : '—';
+                    const statusLabel = getStatusBadge(f.status);
+                    const statusCls = getStatusClass(f.status);
+                    html += `
+                        <div class="fixture-row" data-id="${f.id}">
+                            <div class="info">
+                                <span class="league">${league}</span>
+                                <span class="teams">${teams.home} <span class="vs">vs</span> ${teams.away}</span>
+                                <span class="score">${scoreDisplay}</span>
+                                <span class="status ${statusCls}">${statusLabel}</span>
+                                <span class="date-time">${formatDate(f.date)} ${f.time}</span>
+                            </div>
+                            ${ADMIN_AUTH ? `
+                                <div class="actions-sm">
+                                    <button class="del-btn" onclick="deleteFixture('${f.id}')"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                populateLeagueFilter();
+            } catch (e) {
+                console.error('Error in renderFixtures:', e);
+                document.getElementById('fixtureList').innerHTML = '<div class="debug-msg">⚠️ Error loading fixtures.</div>';
+            }
+        }
+
+        function populateLeagueFilter() {
+            const sel = document.getElementById('fixtureLeagueFilter');
+            const current = sel.value;
+            sel.innerHTML = '<option value="all">All Leagues</option>';
+            APP_DATA.leagues.forEach(l => { sel.innerHTML += `<option value="${l.id}">${l.name}</option>`; });
+            sel.value = current;
+        }
+
+        function renderTables() {
+            try {
+                const sel = document.getElementById('tableLeagueSelect');
+                const current = sel.value;
+                sel.innerHTML = '<option value="">Select a league</option>';
+                APP_DATA.leagues.forEach(l => { sel.innerHTML += `<option value="${l.id}">${l.name}</option>`; });
+                if (current && APP_DATA.leagues.some(l => l.id === current)) sel.value = current;
+                else if (APP_DATA.leagues.length > 0) sel.value = APP_DATA.leagues[0].id;
+                buildTable(sel.value);
+            } catch(e) { console.error(e); }
+        }
+
+        function buildTable(leagueId) {
+            const container = document.getElementById('tableContainer');
+            if (!leagueId) {
+                container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);font-weight:500;">Select a league to view the table.</div>';
+                return;
+            }
+
+            const fixtures = APP_DATA.fixtures.filter(f => f.leagueId === leagueId && f.status === 'finished');
+            const teams = getTeamsByLeague(leagueId);
+            const standings = teams.map(t => ({ id: t.id, name: t.name, played: 0, wins: 0, draws: 0, losses: 0, goalsFor: 0, goalsAgainst: 0, points: 0, form: [] }));
+
+            fixtures.forEach(f => {
+                const home = standings.find(s => s.id === f.homeTeamId);
+                const away = standings.find(s => s.id === f.awayTeamId);
+                if (!home || !away) return;
+                const hs = f.homeScore ?? 0, as = f.awayScore ?? 0;
+                home.played++; away.played++;
+                home.goalsFor += hs; home.goalsAgainst += as;
+                away.goalsFor += as; away.goalsAgainst += hs;
+                if (hs > as) { home.wins++; home.points += 3; home.form.push('W'); away.losses++; away.form.push('L'); }
+                else if (hs < as) { away.wins++; away.points += 3; away.form.push('W'); home.losses++; home.form.push('L'); }
+                else { home.draws++; home.points += 1; home.form.push('D'); away.draws++; away.points += 1; away.form.push('D'); }
+                if (home.form.length > 6) home.form.shift();
+                if (away.form.length > 6) away.form.shift();
+            });
+
+            standings.sort((a, b) => {
+                if (a.points !== b.points) return b.points - a.points;
+                return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst);
+            });
+
+            if (standings.length === 0) {
+                container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-secondary);font-weight:500;">No data for this league yet.</div>';
+                return;
+            }
+
+            let html = `<table><thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Form</th></tr></thead><tbody>`;
+            standings.forEach((s, i) => {
+                const pos = i + 1;
+                let posCls = '';
+                if (pos === 1) posCls = 'gold';
+                else if (pos === 2) posCls = 'silver';
+                else if (pos === 3) posCls = 'bronze';
+                const gd = s.goalsFor - s.goalsAgainst;
+                const formHtml = s.form.map(f => `<span class="f ${f}">${f}</span>`).join('');
+                html += `<tr><td class="pos ${posCls}">${pos}</td><td class="team-name">${s.name}</td><td>${s.played}</td><td>${s.wins}</td><td>${s.draws}</td><td>${s.losses}</td><td>${s.goalsFor}</td><td>${s.goalsAgainst}</td><td>${gd > 0 ? '+' : ''}${gd}</td><td><strong>${s.points}</strong></td><td><div class="form">${formHtml || '—'}</div></td></tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function renderAdmin() {
+            const loginDiv = document.getElementById('adminLogin');
+            const panelDiv = document.getElementById('adminPanel');
+            if (ADMIN_AUTH) {
+                loginDiv.style.display = 'none';
+                panelDiv.classList.add('active');
+                renderAdminPanels();
+            } else {
+                loginDiv.style.display = 'block';
+                panelDiv.classList.remove('active');
+            }
+        }
+
+        function renderAdminPanels() {
+            try {
+                document.getElementById('adminLeagueList').innerHTML = APP_DATA.leagues.map(l =>
+                    `<div class="item"><span>${l.name}</span><span class="del" onclick="deleteLeague('${l.id}')"><i class="fas fa-times"></i></span></div>`
+                ).join('');
+
+                document.getElementById('adminTeamList').innerHTML = APP_DATA.teams.map(t =>
+                    `<div class="item"><span>${t.name} <span style="color:var(--text-light);font-size:11px;font-weight:500;">(${getLeagueName(t.leagueId)})</span></span><span class="del" onclick="deleteTeam('${t.id}')"><i class="fas fa-times"></i></span></div>`
+                ).join('');
+
+                populateAdminSelects();
+
+                document.getElementById('adminFixtureList').innerHTML = APP_DATA.fixtures.map(f => {
+                    const teams = getFixtureTeams(f);
+                    return `<div class="item" style="cursor:pointer;" onclick="editFixture('${f.id}')">
+                        <span>${teams.home} vs ${teams.away} <span style="color:var(--text-light);font-size:11px;font-weight:500;">${formatDate(f.date)}</span></span>
+                        <span style="font-size:11px;color:var(--text-secondary);font-weight:500;">${f.status}</span>
+                        <span class="del" onclick="event.stopPropagation();deleteFixture('${f.id}')"><i class="fas fa-trash"></i></span>
+                    </div>`;
+                }).join('');
+            } catch(e) { console.error(e); }
+        }
+
+        function populateAdminSelects() {
+            ['adminTeamLeagueSelect', 'adminFixtureLeague'].forEach(id => {
+                const sel = document.getElementById(id);
+                const current = sel.value;
+                sel.innerHTML = APP_DATA.leagues.map(l => `<option value="${l.id}">${l.name}</option>`).join('');
+                if (current && APP_DATA.leagues.some(l => l.id === current)) sel.value = current;
+            });
+
+            const leagueId = document.getElementById('adminFixtureLeague').value;
+            const teams = getTeamsByLeague(leagueId);
+            ['adminFixtureHome', 'adminFixtureAway'].forEach(id => {
+                const sel = document.getElementById(id);
+                const current = sel.value;
+                sel.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+                if (current && teams.some(t => t.id === current)) sel.value = current;
+            });
+        }
+
+        // ============================================================
+        //  ADMIN ACTIONS
+        // ============================================================
+        function deleteLeague(id) {
+            if (!confirm('Delete this league and all its teams & fixtures?')) return;
+            APP_DATA.leagues = APP_DATA.leagues.filter(l => l.id !== id);
+            APP_DATA.teams = APP_DATA.teams.filter(t => t.leagueId !== id);
+            APP_DATA.fixtures = APP_DATA.fixtures.filter(f => f.leagueId !== id);
+            saveData(APP_DATA);
+            renderAdminPanels();
+            refreshAll();
+            toast('League deleted', 'success');
+        }
+
+        function deleteTeam(id) {
+            if (!confirm('Delete this team?')) return;
+            APP_DATA.teams = APP_DATA.teams.filter(t => t.id !== id);
+            APP_DATA.fixtures = APP_DATA.fixtures.filter(f => f.homeTeamId !== id && f.awayTeamId !== id);
+            saveData(APP_DATA);
+            renderAdminPanels();
+            refreshAll();
+            toast('Team deleted', 'success');
+        }
+
+        function deleteFixture(id) {
+            if (!confirm('Delete this fixture?')) return;
+            APP_DATA.fixtures = APP_DATA.fixtures.filter(f => f.id !== id);
+            saveData(APP_DATA);
+            renderAdminPanels();
+            refreshAll();
+            toast('Fixture deleted', 'success');
+        }
+
+        function editFixture(id) {
+            const f = APP_DATA.fixtures.find(fx => fx.id === id);
+            if (!f) return;
+            document.getElementById('adminEditFixtureId').value = id;
+            document.getElementById('adminFixtureLeague').value = f.leagueId;
+            document.getElementById('adminFixtureHome').value = f.homeTeamId;
+            document.getElementById('adminFixtureAway').value = f.awayTeamId;
+            document.getElementById('adminFixtureDate').value = f.date;
+            document.getElementById('adminFixtureTime').value = f.time || '15:00';
+            document.getElementById('adminFixtureHomeScore').value = f.homeScore ?? '';
+            document.getElementById('adminFixtureAwayScore').value = f.awayScore ?? '';
+            document.getElementById('adminFixtureStatus').value = f.status;
+            const leagueId = f.leagueId;
+            const teams = getTeamsByLeague(leagueId);
+            ['adminFixtureHome', 'adminFixtureAway'].forEach(id => {
+                const sel = document.getElementById(id);
+                const current = sel.value;
+                sel.innerHTML = teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+                if (current && teams.some(t => t.id === current)) sel.value = current;
+            });
+            toast('Fixture loaded for editing', 'info');
+        }
+
+        function addLeague() {
+            const name = document.getElementById('adminLeagueName').value.trim();
+            if (!name) return toast('Please enter a league name', 'error');
+            if (APP_DATA.leagues.some(l => l.name.toLowerCase() === name.toLowerCase())) {
+                return toast('League already exists', 'error');
+            }
+            const id = 'l' + Date.now();
+            APP_DATA.leagues.push({ id, name });
+            saveData(APP_DATA);
+            document.getElementById('adminLeagueName').value = '';
+            renderAdminPanels();
+            refreshAll();
+            toast(`League "${name}" added`, 'success');
+        }
+
+        function addTeam() {
+            const name = document.getElementById('adminTeamName').value.trim();
+            const leagueId = document.getElementById('adminTeamLeagueSelect').value;
+            if (!name) return toast('Please enter a team name', 'error');
+            if (!leagueId) return toast('Please select a league', 'error');
+            if (APP_DATA.teams.some(t => t.name.toLowerCase() === name.toLowerCase() && t.leagueId === leagueId)) {
+                return toast('Team already exists in this league', 'error');
+            }
+            const id = 't' + Date.now();
+            APP_DATA.teams.push({ id, name, leagueId });
+            saveData(APP_DATA);
+            document.getElementById('adminTeamName').value = '';
+            renderAdminPanels();
+            refreshAll();
+            toast(`Team "${name}" added`, 'success');
+        }
+
+        function addFixture() {
+            const leagueId = document.getElementById('adminFixtureLeague').value;
+            const homeTeamId = document.getElementById('adminFixtureHome').value;
+            const awayTeamId = document.getElementById('adminFixtureAway').value;
+            const date = document.getElementById('adminFixtureDate').value;
+            const time = document.getElementById('adminFixtureTime').value || '15:00';
+            const homeScore = document.getElementById('adminFixtureHomeScore').value;
+            const awayScore = document.getElementById('adminFixtureAwayScore').value;
+            const status = document.getElementById('adminFixtureStatus').value;
+
+            if (!leagueId || !homeTeamId || !awayTeamId || !date) return toast('Please fill in all required fields', 'error');
+            if (homeTeamId === awayTeamId) return toast('Home and away teams must be different', 'error');
+
+            const id = 'f' + Date.now();
+            const fixture = { id, leagueId, homeTeamId, awayTeamId, date, time, homeScore: homeScore !== '' ? Number(homeScore) : null, awayScore: awayScore !== '' ? Number(awayScore) : null, status };
+            APP_DATA.fixtures.push(fixture);
+            saveData(APP_DATA);
+            document.getElementById('adminEditFixtureId').value = '';
+            document.getElementById('adminFixtureHomeScore').value = '';
+            document.getElementById('adminFixtureAwayScore').value = '';
+            renderAdminPanels();
+            refreshAll();
+            if (status === 'finished' && fixture.homeScore !== null && fixture.awayScore !== null) {
+                updateTrackingForFixture(id);
+            }
+            toast('Fixture added', 'success');
+        }
+
+        function updateFixture() {
+            const editId = document.getElementById('adminEditFixtureId').value;
+            if (!editId) return toast('Select a fixture to update first', 'error');
+            const fixture = APP_DATA.fixtures.find(f => f.id === editId);
+            if (!fixture) return toast('Fixture not found', 'error');
+
+            fixture.leagueId = document.getElementById('adminFixtureLeague').value;
+            fixture.homeTeamId = document.getElementById('adminFixtureHome').value;
+            fixture.awayTeamId = document.getElementById('adminFixtureAway').value;
+            fixture.date = document.getElementById('adminFixtureDate').value;
+            fixture.time = document.getElementById('adminFixtureTime').value || '15:00';
+            const hs = document.getElementById('adminFixtureHomeScore').value;
+            const as = document.getElementById('adminFixtureAwayScore').value;
+            fixture.homeScore = hs !== '' ? Number(hs) : null;
+            fixture.awayScore = as !== '' ? Number(as) : null;
+            fixture.status = document.getElementById('adminFixtureStatus').value;
+
+            saveData(APP_DATA);
+            document.getElementById('adminEditFixtureId').value = '';
+            document.getElementById('adminFixtureHomeScore').value = '';
+            document.getElementById('adminFixtureAwayScore').value = '';
+            renderAdminPanels();
+            refreshAll();
+
+            if (fixture.status === 'finished' && fixture.homeScore !== null && fixture.awayScore !== null) {
+                updateTrackingForFixture(editId);
+            }
+            toast('Fixture updated', 'success');
+        }
+
+        // ============================================================
+        //  BET SLIP - Auto generated
+        // ============================================================
+        function getCurrentBetSlipPicks() {
+            try { return generateAutoBetSlip() || []; } catch (e) { console.error('Bet slip generation error:', e); return []; }
+        }
+
+        function getBetSlipFacebookText(picks) {
+            if (!picks || !picks.length) return '';
+            const lines = picks.map((pick, i) => {
+                const league = pick.league || getLeagueName(pick.leagueId) || '';
+                const date = pick.date ? formatDate(pick.date) : '';
+                return `${i + 1}. ${pick.teams.home} vs ${pick.teams.away}\n   🎯 ${pick.pick} | Confidence: ${pick.confidence}%${league ? `\n   🏆 ${league}` : ''}${date ? ` | 📅 ${date}` : ''}`;
+            });
+            return `🇰🇪 KENYATTA BETTING ANALYSIS\n\n🎫 AUTO BET SLIP\n\n${lines.join('\n\n')}\n\n📊 Total selections: ${picks.length}\n\n⚠️ Predictions are for analysis purposes. Bet responsibly.\n\nPowered by Kenyatta Betting Analysis`;
+        }
+
+        async function publishBetSlipToFacebook() {
+            const settings = loadFacebookSettings();
+            const picks = getCurrentBetSlipPicks();
+            if (!picks.length) return toast('No selections available in the bet slip', 'error');
+            if (!settings.publishEndpoint) {
+                return toast('Add your secure Facebook publish endpoint in Admin first', 'error');
+            }
+
+            const message = getBetSlipFacebookText(picks);
+            const payload = {
+                app: 'Kenyatta Betting Analysis',
+                type: 'bet_slip',
+                pageUrl: settings.pageUrl,
+                message,
+                selections: picks.map(pick => ({
+                    fixtureId: pick.id || pick.fixtureId || null,
+                    home: pick.teams?.home || '',
+                    away: pick.teams?.away || '',
+                    league: pick.league || getLeagueName(pick.leagueId) || '',
+                    date: pick.date || '',
+                    time: pick.time || '',
+                    pick: pick.pick || '',
+                    confidence: Number(pick.confidence) || 0
+                })),
+                totalSelections: picks.length,
+                publishedAt: new Date().toISOString()
+            };
+
+            try {
+                toast('Posting bet slip to Facebook Page...', 'info');
+                const response = await fetch(settings.publishEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                let result = {};
+                try { result = await response.json(); } catch (_) {}
+                if (!response.ok || result.success === false) {
+                    throw new Error(result.error || `HTTP ${response.status}`);
+                }
+                toast('Bet slip posted to your Facebook Page', 'success');
+            } catch (error) {
+                console.error('Bet slip Facebook publish error:', error);
+                toast('Bet slip could not be posted. Check the Facebook endpoint.', 'error');
+            }
+        }
+
+        function updateBetSlip() {
+            const autoPicks = getCurrentBetSlipPicks();
+            const container = document.getElementById('betSlipItems');
+
+            if (autoPicks.length === 0) {
+                container.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:14px 0;">No matches available for bet slip.</div>';
+                document.getElementById('slipTotal').textContent = '0';
+                document.getElementById('betSlipCount').textContent = '0';
+                return;
+            }
+
+            let html = '';
+            autoPicks.forEach((pick, index) => {
+                html += `
+                    <div class="slip-item">
+                        <span>${pick.teams.home} vs ${pick.teams.away}</span>
+                        <span class="pick-label">${pick.pick}</span>
+                        <span style="font-size:11px;color:var(--text-secondary);">${pick.confidence}%</span>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            document.getElementById('slipTotal').textContent = autoPicks.length;
+            document.getElementById('betSlipCount').textContent = autoPicks.length;
+        }
+
+        // ============================================================
+        //  CALENDAR
+        // ============================================================
+        let calDate = new Date();
+        let calSelectedDate = null;
+
+        function openCalendar() {
+            // Every opening starts from the real current date.
+            syncCalendarToToday();
+            document.getElementById('calendarModal').classList.add('open');
+            renderCalendar();
+        }
+
+        function closeCalendar() {
+            document.getElementById('calendarModal').classList.remove('open');
+        }
+
+        function renderCalendar() {
+            const year = calDate.getFullYear(), month = calDate.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const todayStr = getTodayStr();
+
+            document.getElementById('calMonthLabel').textContent =
+                new Date(year, month, 1).toLocaleDateString('en-US', {
+                    month: 'long', year: 'numeric'
+                });
+
+            const grid = document.getElementById('calGrid');
+            let gridHtml = '';
+            ['Su','Mo','Tu','We','Th','Fr','Sa'].forEach(d => {
+                gridHtml += `<div class="day-name">${d}</div>`;
+            });
+
+            const prevMonthDays = new Date(year, month, 0).getDate();
+            for (let i = firstDay - 1; i >= 0; i--) {
+                gridHtml += `<div class="day other-month">${prevMonthDays - i}</div>`;
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateObj = new Date(year, month, d);
+                const dateStr = getLocalDateKey(dateObj);
+                const hasFixture = APP_DATA.fixtures.some(f => f.date === dateStr);
+                const isSelected = calSelectedDate === dateStr;
+                const isToday = dateStr === todayStr;
+
+                let cls = 'day';
+                if (hasFixture) cls += ' has-fixture';
+                if (isSelected) cls += ' selected';
+                if (isToday) cls += ' today';
+
+                gridHtml += `<div class="${cls}" data-date="${dateStr}"
+                    onclick="selectCalendarDate('${dateStr}')">${d}</div>`;
+            }
+
+            const totalCells = firstDay + daysInMonth;
+            const remaining = (7 - (totalCells % 7)) % 7;
+            for (let d = 1; d <= remaining; d++) {
+                gridHtml += `<div class="day other-month">${d}</div>`;
+            }
+
+            grid.innerHTML = gridHtml;
+
+            if (calSelectedDate) {
+                showCalendarFixtures(calSelectedDate);
+            } else {
+                const todayFixtures = APP_DATA.fixtures.filter(f => f.date === todayStr);
+                const nextFixture = getNextClosestFixture(new Date());
+                const targetDate = todayFixtures.length
+                    ? todayStr
+                    : (nextFixture ? nextFixture.date : todayStr);
+
+                calSelectedDate = targetDate;
+                showCalendarFixtures(targetDate);
+            }
+        }
+
+        function selectCalendarDate(dateStr) {
+            calSelectedDate = dateStr;
+            renderCalendar();
+            showCalendarFixtures(dateStr);
+        }
+
+        function showCalendarFixtures(dateStr) {
+            const container = document.getElementById('calFixtures');
+            const fixtures = APP_DATA.fixtures
+                .filter(f => f.date === dateStr)
+                .sort((a, b) => (a.time || '99:99').localeCompare(b.time || '99:99'));
+
+            if (fixtures.length === 0) {
+                // If today is empty, jump to the closest upcoming match.
+                if (dateStr === getTodayStr()) {
+                    const nextFixture = getNextClosestFixture(new Date());
+                    if (nextFixture && nextFixture.date !== dateStr) {
+                        calSelectedDate = nextFixture.date;
+                        renderCalendar();
+                        return;
+                    }
+                }
+
+                container.innerHTML =
+                    `<div class="cf-empty">No fixtures on ${formatDate(dateStr)}.</div>`;
+                return;
+            }
+
+            const headingLabel = dateStr === getTodayStr()
+                ? `📅 Today · ${formatDate(dateStr)}`
+                : `📅 ${formatDate(dateStr)}`;
+
+            let html = `<div style="font-weight:800;margin-bottom:8px;color:var(--kenyan-red);font-size:15px;">${headingLabel}</div>`;
+
+            fixtures.forEach(f => {
+                const teams = getFixtureTeams(f);
+                const league = getLeagueName(f.leagueId);
+                const pred = generatePredictions(f);
+                const predStr = pred
+                    ? `${pred.pick1x2} | ${pred.gg} | O2.5 ${pred.over25 ? '✓' : '✗'}`
+                    : 'N/A';
+                const statusLabel = getStatusBadge(f.status);
+
+                html += `
+                    <div class="cf-item">
+                        <div>
+                            <div style="font-weight:700;">${teams.home} vs ${teams.away}</div>
+                            <div style="font-size:10px;color:var(--text-light);margin-top:3px;">
+                                ${league} · 📅 ${formatDate(f.date)} · ⏰ ${f.time || 'TBD'}
+                            </div>
+                        </div>
+                        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+                            <span style="font-size:10px;color:var(--text-secondary);font-weight:500;">${predStr}</span>
+                            <span style="font-size:9px;background:var(--bg-card);padding:1px 10px;border-radius:10px;font-weight:600;">${statusLabel}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+
+        // ============================================================
+        //  FACEBOOK INTEGRATION
+        // ============================================================
+        const FACEBOOK_DEFAULTS = { pageUrl: 'https://www.facebook.com/profile.php?id=100078843466883', publishEndpoint: '/publish' };
+
+        function loadFacebookSettings() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('kenyattaFacebookSettings') || '{}');
+                return { ...FACEBOOK_DEFAULTS, ...saved };
+            } catch (e) {
+                return { ...FACEBOOK_DEFAULTS };
+            }
+        }
+
+        function saveFacebookSettings(showToast = true) {
+            const pageUrl = (document.getElementById('facebookPageUrl')?.value || '').trim();
+            const publishEndpoint = (document.getElementById('facebookPublishEndpoint')?.value || '').trim();
+            localStorage.setItem('kenyattaFacebookSettings', JSON.stringify({ pageUrl, publishEndpoint }));
+            updateFacebookStatus();
+            if (showToast) toast('Facebook settings saved', 'success');
+        }
+
+        function updateFacebookStatus() {
+            const settings = loadFacebookSettings();
+            const status = document.getElementById('facebookStatus');
+            const text = document.getElementById('facebookStatusText');
+            if (!status || !text) return;
+            if (settings.pageUrl) {
+                status.classList.add('connected');
+                text.textContent = 'Facebook Page linked';
+            } else {
+                status.classList.remove('connected');
+                text.textContent = 'Not connected';
+            }
+            const urlInput = document.getElementById('facebookPageUrl');
+            const endpointInput = document.getElementById('facebookPublishEndpoint');
+            if (urlInput && document.activeElement !== urlInput) urlInput.value = settings.pageUrl;
+            if (endpointInput && document.activeElement !== endpointInput) endpointInput.value = settings.publishEndpoint;
+        }
+
+        function getFacebookShareText(fixture) {
+            const teams = getFixtureTeams(fixture);
+            const league = getLeagueName(fixture.leagueId);
+            const pred = generatePredictions(fixture);
+            const date = formatDate(fixture.date);
+            const picks = [];
+            if (pred) {
+                if (pred.pick1x2 === '1') picks.push(`${teams.home} Win`);
+                else if (pred.pick1x2 === '2') picks.push(`${teams.away} Win`);
+                else picks.push('Draw');
+                if (pred.gg === 'GG') picks.push('GG');
+                if (pred.over25) picks.push('Over 2.5');
+            }
+            return `🇰🇪 KENYATTA BETTING ANALYSIS\n\n⚽ ${teams.home} vs ${teams.away}\n🏆 ${league}\n📅 ${date} ${fixture.time || ''}\n🔮 Prediction: ${picks.join(' + ') || 'TBD'}${pred ? `\n📊 Confidence: ${Math.round(pred.confidence * 100)}%` : ''}\n\nPowered by Kenyatta Betting Analysis`;
+        }
+
+        function getBestFixtureForFacebook() {
+            const today = getTodayStr();
+            const candidates = APP_DATA.fixtures.filter(f => f.status !== 'finished');
+            const todayFixtures = candidates.filter(f => f.date === today);
+            const pool = todayFixtures.length ? todayFixtures : candidates;
+            return pool.map(f => ({ f, p: generatePredictions(f) })).sort((a,b) => (b.p?.confidence || 0) - (a.p?.confidence || 0))[0]?.f || null;
+        }
+
+        function sharePredictionToFacebook() {
+            const settings = loadFacebookSettings();
+            const fixture = getBestFixtureForFacebook();
+            if (!fixture) return toast('No upcoming fixture available to share', 'error');
+            const text = getFacebookShareText(fixture);
+            const shareUrl = settings.pageUrl || window.location.href;
+            const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(text)}`;
+            window.open(url, '_blank', 'width=680,height=760,noopener,noreferrer');
+            toast('Facebook share window opened', 'success');
+        }
+
+        async function publishPredictionToFacebook() {
+            const settings = loadFacebookSettings();
+            if (!settings.publishEndpoint) {
+                return toast('Add your secure Facebook publish endpoint first', 'error');
+            }
+            const fixture = getBestFixtureForFacebook();
+            if (!fixture) return toast('No upcoming fixture available to publish', 'error');
+            const teams = getFixtureTeams(fixture);
+            const pred = generatePredictions(fixture);
+            const payload = {
+                app: 'Kenyatta Betting Analysis',
+                pageUrl: settings.pageUrl,
+                fixture: {
+                    id: fixture.id,
+                    home: teams.home,
+                    away: teams.away,
+                    league: getLeagueName(fixture.leagueId),
+                    date: fixture.date,
+                    time: fixture.time || ''
+                },
+                prediction: pred ? { pick1x2: pred.pick1x2, gg: pred.gg, over25: !!pred.over25, confidence: pred.confidence } : null,
+                message: getFacebookShareText(fixture)
+            };
+            try {
+                toast('Publishing to Facebook...', 'info');
+                const response = await fetch(settings.publishEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                toast('Prediction published to Facebook', 'success');
+            } catch (error) {
+                console.error('Facebook publish error:', error);
+                toast('Facebook publish failed. Check your secure endpoint.', 'error');
+            }
+        }
+
+        function openFacebookPage() {
+            const settings = loadFacebookSettings();
+            if (!settings.pageUrl) return toast('Enter your Facebook Page URL first', 'error');
+            window.open(settings.pageUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // ============================================================
+        //  THEME & TOAST
+        // ============================================================
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('betTrackerTheme', next);
+            const icon = document.querySelector('#themeToggle i');
+            icon.className = next === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('betTrackerTheme');
+            if (saved) {
+                document.documentElement.setAttribute('data-theme', saved);
+                const icon = document.querySelector('#themeToggle i');
+                icon.className = saved === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        }
+
+        function toast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = `toast ${type}`;
+            const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+            t.innerHTML = `<span><i class="fas ${icons[type] || icons.info}"></i></span> ${message}`;
+            container.appendChild(t);
+            setTimeout(() => { t.classList.add('hide'); setTimeout(() => t.remove(), 350); }, 3200);
+        }
+
+        // ============================================================
+        //  NAVIGATION
+        // ============================================================
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar .nav a').forEach(a => a.classList.remove('active'));
+            const target = document.getElementById('page-' + page);
+            if (target) target.classList.add('active');
+            const link = document.querySelector(`.sidebar .nav a[data-page="${page}"]`);
+            if (link) link.classList.add('active');
+
+            const subs = {
+                dashboard: 'Professional betting insights & predictions',
+                predictions: 'All upcoming predictions at a glance',
+                insights: 'Detailed reasoning behind every prediction',
+                tracking: 'Track prediction accuracy over time',
+                fixtures: 'Browse all matches and results',
+                tables: 'Live league standings',
+                admin: 'Manage leagues, teams, and fixtures'
+            };
+            document.getElementById('pageSub').textContent = subs[page] || '';
+
+            if (page === 'tracking') trackAllFinishedFixtures();
+
+            switch (page) {
+                case 'dashboard': renderDashboard(); updateTicker(); updateAI(); break;
+                case 'predictions': renderPredictionsPage(); break;
+                case 'insights': renderInsightsPage(); break;
+                case 'tracking': renderTrackingPage(); break;
+                case 'fixtures': renderFixtures(); break;
+                case 'tables': renderTables(); break;
+                case 'admin': renderAdmin(); break;
+            }
+        }
+
+        function refreshAll() {
+            const active = document.querySelector('.sidebar .nav a.active');
+            if (active) navigateTo(active.dataset.page);
+            else navigateTo('dashboard');
+
+            document.getElementById('currentDateDisplay').textContent =
+                new Date().toLocaleDateString('en-US', {
+                    weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'
+                });
+
+            syncCalendarToToday();
+            updateTicker();
+            updateAI();
+            updateBetSlip();
+
+            if (document.getElementById('calendarModal').classList.contains('open')) {
+                renderCalendar();
+            }
+        }
+
+        // ============================================================
+        //  EVENT BINDING
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            trackAllFinishedFixtures();
+            syncCalendarToToday();
+            refreshAll();
+
+            let lastAppDateKey = getTodayStr();
+
+            setInterval(() => {
+                const currentDateKey = getTodayStr();
+
+                updateTicker();
+                updateAI();
+                updateBetSlip();
+
+                if (currentDateKey !== lastAppDateKey) {
+                    lastAppDateKey = currentDateKey;
+                    syncCalendarToToday();
+                    refreshAll();
+                    toast(`Calendar updated for ${formatDate(currentDateKey)}`, 'success');
+                } else if (document.getElementById('calendarModal').classList.contains('open')) {
+                    renderCalendar();
+                }
+            }, 30000);
+
+            document.querySelectorAll('.sidebar .nav a').forEach(a => {
+                a.addEventListener('click', (e) => { e.preventDefault(); navigateTo(a.dataset.page); });
+            });
+
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            document.getElementById('adminLoginBtn').addEventListener('click', () => {
+                const pw = document.getElementById('adminPasswordInput').value;
+                if (pw === ADMIN_PASSWORD) {
+                    ADMIN_AUTH = true;
+                    document.getElementById('adminPasswordInput').value = '';
+                    document.getElementById('adminLoginError').textContent = '';
+                    renderAdmin();
+                    refreshAll();
+                    toast('Admin access granted', 'success');
+                } else {
+                    document.getElementById('adminLoginError').textContent = 'Incorrect password. Try again.';
+                }
+            });
+            document.getElementById('adminPasswordInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') document.getElementById('adminLoginBtn').click();
+            });
+
+            document.getElementById('adminAddLeagueBtn').addEventListener('click', addLeague);
+            document.getElementById('adminLeagueName').addEventListener('keydown', (e) => { if (e.key === 'Enter') addLeague(); });
+
+            document.getElementById('adminAddTeamBtn').addEventListener('click', addTeam);
+            document.getElementById('adminTeamName').addEventListener('keydown', (e) => { if (e.key === 'Enter') addTeam(); });
+
+            document.getElementById('saveFacebookSettingsBtn').addEventListener('click', () => saveFacebookSettings(true));
+            document.getElementById('openFacebookPageBtn').addEventListener('click', openFacebookPage);
+            document.getElementById('shareCurrentPredictionBtn').addEventListener('click', sharePredictionToFacebook);
+            document.getElementById('publishFacebookBtn').addEventListener('click', publishPredictionToFacebook);
+            document.getElementById('shareBetSlipFacebookBtn').addEventListener('click', publishBetSlipToFacebook);
+            updateFacebookStatus();
+
+            document.getElementById('adminAddFixtureBtn').addEventListener('click', addFixture);
+            document.getElementById('adminUpdateFixtureBtn').addEventListener('click', updateFixture);
+            document.getElementById('adminFixtureLeague').addEventListener('change', populateAdminSelects);
+
+            document.getElementById('fixtureLeagueFilter').addEventListener('change', renderFixtures);
+            document.getElementById('fixtureStatusFilter').addEventListener('change', renderFixtures);
+            document.getElementById('fixtureDateFilter').addEventListener('change', renderFixtures);
+            document.getElementById('clearFixtureFilters').addEventListener('click', () => {
+                document.getElementById('fixtureLeagueFilter').value = 'all';
+                document.getElementById('fixtureStatusFilter').value = 'all';
+                document.getElementById('fixtureDateFilter').value = '';
+                renderFixtures();
+            });
+
+            document.getElementById('tableLeagueSelect').addEventListener('change', () => {
+                buildTable(document.getElementById('tableLeagueSelect').value);
+            });
+
+            document.getElementById('trackingTypeFilter').addEventListener('change', renderTrackingPage);
+            document.getElementById('clearTrackingFilters').addEventListener('click', () => {
+                document.getElementById('trackingTypeFilter').value = 'all';
+                renderTrackingPage();
+            });
+
+            document.getElementById('openCalendarBtn').addEventListener('click', openCalendar);
+            document.getElementById('closeCalendarBtn').addEventListener('click', closeCalendar);
+            document.getElementById('calendarModal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeCalendar();
+            });
+            document.getElementById('calPrev').addEventListener('click', () => { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); });
+            document.getElementById('calNext').addEventListener('click', () => { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); });
+
+            document.getElementById('betSlipToggle').addEventListener('click', () => {
+                document.getElementById('betSlipModal').classList.toggle('open');
+                updateBetSlip();
+            });
+            document.getElementById('closeBetSlip').addEventListener('click', () => {
+                document.getElementById('betSlipModal').classList.remove('open');
+            });
+
+            document.getElementById('aiToggle').addEventListener('click', () => {
+                const ai = document.getElementById('aiAssistant');
+                ai.classList.toggle('open');
+                if (ai.classList.contains('open')) updateAI();
+            });
+            document.getElementById('closeAi').addEventListener('click', () => {
+                document.getElementById('aiAssistant').classList.remove('open');
+            });
+            document.getElementById('aiSendBtn').addEventListener('click', () => {
+                const input = document.getElementById('aiInput');
+                if (input.value.trim()) {
+                    handleAIQuery(input.value);
+                    input.value = '';
+                }
+            });
+            document.getElementById('aiInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const input = document.getElementById('aiInput');
+                    if (input.value.trim()) {
+                        handleAIQuery(input.value);
+                        input.value = '';
+                    }
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeCalendar();
+                    document.getElementById('betSlipModal').classList.remove('open');
+                    document.getElementById('aiAssistant').classList.remove('open');
+                }
+            });
+
+            window.deleteFixture = deleteFixture;
+            window.editFixture = editFixture;
+            window.selectCalendarDate = selectCalendarDate;
+            window.openCalendar = openCalendar;
+            window.closeCalendar = closeCalendar;
+            window.handleAIQuery = handleAIQuery;
+        });
+
+        if (APP_DATA.fixtures.length === 0) {
+            APP_DATA.fixtures = seedFixtures();
+            saveData(APP_DATA);
+        }
+
+        console.log('🇰🇪 Kenyatta Betting Analysis v4.0 loaded!');
+        console.log(`📊 ${APP_DATA.leagues.length} leagues, ${APP_DATA.teams.length} teams, ${APP_DATA.fixtures.length} fixtures`);
+        console.log(`📈 ${APP_DATA.tracking.history.length} tracked predictions`);
+    </script>
+</body>
+</html>
